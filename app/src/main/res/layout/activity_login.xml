@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="15dp"
+    android:background="@drawable/fondo1"
+    tools:context=".Login">
+
+    <Button
+        android:id="@+id/btn_celular"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/boton1"
+        android:drawableLeft="@drawable/telefono"
+        android:fontFamily="@font/belleza"
+        android:paddingLeft="20dp"
+        android:paddingRight="40dp"
+        android:text="Número de celular"
+        android:textAlignment="center"
+        android:textColor="@color/blanco"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.517"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.897"></Button>
+
+    <Button
+        android:id="@+id/btn_facebook"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="11dp"
+        android:background="@drawable/boton2"
+        android:drawableLeft="@drawable/facebook"
+        android:fontFamily="@font/belleza"
+        android:paddingLeft="20dp"
+        android:paddingRight="40dp"
+        android:text="Facebook"
+        android:textAlignment="center"
+        android:textColor="@color/negro"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.517"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_celular"
+        app:layout_constraintVertical_bias="0.448"></Button>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
