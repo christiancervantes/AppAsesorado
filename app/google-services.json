@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "730106096279",
+    "firebase_url": "https://appasesorado.firebaseio.com",
+    "project_id": "appasesorado",
+    "storage_bucket": "appasesorado.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:730106096279:android:81e9f9bbdf1c6fa6ba97d2",
+        "android_client_info": {
+          "package_name": "com.example.appasesorado"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "730106096279-euunjnflbt9faqp97v444rft0c94ugq3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOkEAH16t049vwjE_fNj5m47zhoFm4_Ws"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "730106096279-euunjnflbt9faqp97v444rft0c94ugq3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
