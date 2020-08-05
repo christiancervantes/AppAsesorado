@@ -130,7 +130,6 @@ public class Splash extends AppCompatActivity {
                 new AuthUI.IdpConfig.FacebookBuilder().build(),
                 new AuthUI.IdpConfig.GoogleBuilder().build());
 
-        //showSignInOptions();
 
         firebaseAuth = FirebaseAuth.getInstance();
 
