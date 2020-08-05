@@ -4,9 +4,10 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
 
-    <string name="facebook_application_id" translatable="false">720712358490708</string>
+    <string name="facebook_application_id" translatable="false">591576961726012</string>
     <!-- Facebook Application ID, prefixed by 'fb'. Enables Chrome Custom tabs. -->
-    <string name="facebook_login_protocol_scheme" translatable="false">fb720712358490708</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb591576961726012</string>
+
 
     <string-array name="lista">
         <item>Escoja su carrera</item>
