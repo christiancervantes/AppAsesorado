@@ -83,6 +83,7 @@ public class Splash extends AppCompatActivity {
     TextView fechaactualizacion;
 
     //autenficacion
+    //prueba
     private List<AuthUI.IdpConfig> providers;
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener listener;
