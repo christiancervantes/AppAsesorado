@@ -174,7 +174,10 @@ public class Splash extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()){
-                            Toast.makeText(Splash.this, "Ingreso", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(Splash.this, "Ingreso", Toast.LENGTH_SHORT).show();
+                            Usuario usuario = snapshot.getValue(Usuario.class);
+                            goToHomeActivity(usuario);
+
                         }else{
                            showRegisterLayout();
                         }
@@ -284,6 +287,7 @@ public class Splash extends AppCompatActivity {
                     public void onSuccess(Void aVoid) {
                         Toast.makeText(Splash.this, "Registrado correctamente!!", Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
+                        goToHomeActivity(usuario);
                     }
                 });
             }
@@ -325,8 +329,9 @@ public class Splash extends AppCompatActivity {
     }
 
     private void goToHomeActivity(Usuario usuario) {
-        Comun.actualUsuario = usuario;
-
+        Comun.actualUsuario = usuario; //init value
+        startActivity(new Intent(Splash.this,Dashboard.class));
+        finish();
     }
 
     @Override
