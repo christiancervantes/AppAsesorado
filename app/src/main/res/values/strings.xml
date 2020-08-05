@@ -8,6 +8,11 @@
     <!-- Facebook Application ID, prefixed by 'fb'. Enables Chrome Custom tabs. -->
     <string name="facebook_login_protocol_scheme" translatable="false">fb720712358490708</string>
 
+    <string-array name="lista">
+        <item>Escoja su carrera</item>
+        <item>Ingenieria de Sistemas e Informatica</item>
+        <item>Administracion de empresas</item>
+    </string-array>
 
 
 </resources>

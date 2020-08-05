@@ -2,23 +2,31 @@ package com.example.appasesorado.Modelos;
 
 public
 class Usuario {
-    private String uid,nombre,celular,direccion,referencia,apodo;
+    private String uid,nombre,apellido,celular,spinner;
     private String fechadecumpleaños,fechadecreacion,fechaactualizacion;
-    private double lat,lng;
+    private double rating;
 
     public Usuario() {
     }
 
-    public Usuario(String uid, String nombre, String celular, String direccion, String referencia, String apodo, String fechadecumpleaños, String fechadecreacion, String fechaactualizacion) {
+    public Usuario(String uid, String nombre, String apellido, String celular, String spinner, String fechadecumpleaños, String fechadecreacion, String fechaactualizacion, double rating) {
         this.uid = uid;
         this.nombre = nombre;
+        this.apellido = apellido;
         this.celular = celular;
-        this.direccion = direccion;
-        this.referencia = referencia;
-        this.apodo = apodo;
+        this.spinner = spinner;
         this.fechadecumpleaños = fechadecumpleaños;
         this.fechadecreacion = fechadecreacion;
         this.fechaactualizacion = fechaactualizacion;
+        this.rating = rating;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
     }
 
     public String getUid() {
@@ -45,36 +53,12 @@ class Usuario {
         this.celular = celular;
     }
 
-    public String getDireccion() {
-        return direccion;
-    }
-
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
-
-    public String getReferencia() {
-        return referencia;
-    }
-
-    public void setReferencia(String referencia) {
-        this.referencia = referencia;
-    }
-
     public String getFechadecumpleaños() {
         return fechadecumpleaños;
     }
 
     public void setFechadecumpleaños(String fechadecumpleaños) {
         this.fechadecumpleaños = fechadecumpleaños;
-    }
-
-    public String getApodo() {
-        return apodo;
-    }
-
-    public void setApodo(String apodo) {
-        this.apodo = apodo;
     }
 
     public String getFechadecreacion() {
@@ -93,19 +77,19 @@ class Usuario {
         this.fechaactualizacion = fechaactualizacion;
     }
 
-    public double getLat() {
-        return lat;
+    public double getRating() {
+        return rating;
     }
 
-    public void setLat(double lat) {
-        this.lat = lat;
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 
-    public double getLng() {
-        return lng;
+    public String getSpinner() {
+        return spinner;
     }
 
-    public void setLng(double lng) {
-        this.lng = lng;
+    public void setSpinner(String spinner) {
+        this.spinner = spinner;
     }
 }

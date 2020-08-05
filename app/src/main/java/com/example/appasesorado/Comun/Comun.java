@@ -9,6 +9,7 @@ import com.example.appasesorado.Modelos.Usuario;
 public
 class Comun {
 
+    public static final String STUDENT_INFO_REF = "estudiantes";
     public static Usuario actualUsuario;
 
     public static boolean isConnectedToInternet (Context context){
