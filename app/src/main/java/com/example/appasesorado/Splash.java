@@ -12,8 +12,12 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +47,8 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -55,6 +61,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -112,6 +120,21 @@ public class Splash extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    "com.example.appasesorado",                  //Insert your own package name.
+                    PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+
+        } catch (NoSuchAlgorithmException e) {
+
+        }
         setContentView(R.layout.activity_splash);
 
     init();
@@ -126,6 +149,7 @@ public class Splash extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         studentInfoRef = database.getReference(Comun.STUDENT_INFO_REF);
 
+
         providers = Arrays.asList(
                 new AuthUI.IdpConfig.PhoneBuilder().build(),
                 new AuthUI.IdpConfig.FacebookBuilder().build(),
@@ -138,13 +162,13 @@ public class Splash extends AppCompatActivity {
             FirebaseUser user = myFirebaseAuth.getCurrentUser();
             if ( user != null)
                 //delaySplashScreen();
-               checkUserFromFirebase(user);
+               checkUserFromFirebase();
             else
                 showLogin();
         };
     }
 
-    private void checkUserFromFirebase(FirebaseUser user) {
+    private void checkUserFromFirebase() {
         studentInfoRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -152,7 +176,7 @@ public class Splash extends AppCompatActivity {
                         if (snapshot.exists()){
                             Toast.makeText(Splash.this, "Ingreso", Toast.LENGTH_SHORT).show();
                         }else{
-                           // showRegisterLayout(user);
+                           showRegisterLayout();
                         }
                     }
 
@@ -163,12 +187,12 @@ public class Splash extends AppCompatActivity {
                 });
     }
 
-    private void showRegisterLayout(FirebaseUser user) {
+    private void showRegisterLayout() {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.DialogTheme);
         LayoutInflater inflater = getLayoutInflater(); //-----cambio 1
         builder.setCancelable(false);
-        builder.setTitle("Registro");
+        builder.setTitle("Registro de datos");
 
         View itemView = LayoutInflater.from(this).inflate(R.layout.layout_register,null);
 
@@ -176,10 +200,7 @@ public class Splash extends AppCompatActivity {
         final AlertDialog dialog = builder.create();
         dialog.show();  //-----cambio 2
 
-
-
         EditText edt_nombre = (EditText) itemView.findViewById(R.id.edt_nombre);
-        EditText edt_apellido = (EditText) itemView.findViewById(R.id.edt_apellido);
         EditText edt_celular = (EditText) itemView.findViewById(R.id.edt_phone);
 
         //Spinner spinner = (Spinner) itemView.findViewById(R.id.spinner_registro);
@@ -221,45 +242,52 @@ public class Splash extends AppCompatActivity {
 
 
         //ya pone el celular de usuario registrado
-        edt_celular.setText(user.getPhoneNumber());
+        if(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber() != null &&
+        !TextUtils.isEmpty(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber())){
+            edt_celular.setText(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+        } else{
+            edt_celular.setHint("Ingrese su celular");
+        }
 
 
-        TextView txt_registrar = itemView.findViewById(R.id.btn_continuar);
-        txt_registrar.setOnClickListener(v -> {
+        Button btn_continuar = itemView.findViewById(R.id.btn_continuar);
+        btn_continuar.setOnClickListener(v -> {
 
             if (TextUtils.isEmpty(edt_nombre.getText().toString())){
-                Toast.makeText(this, "Ingrese su nombre por favor", Toast.LENGTH_SHORT).show();
-                return;
-            }else if (TextUtils.isEmpty(edt_apellido.getText().toString())){
-                Toast.makeText(this, "Ingrese su apellido por favor", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Ingrese su nombre y apellido por favor", Toast.LENGTH_SHORT).show();
                 return;
             }else if (TextUtils.isEmpty(edt_fechadenacimiento.getText().toString())){
                 Toast.makeText(this, "Ingrese su fecha de Nacimiento porfavor", Toast.LENGTH_SHORT).show();
                 return;
+            }else{
+
+                Usuario usuario = new Usuario();
+
+                usuario.setNombre(edt_nombre.getText().toString());
+                usuario.setCelular(edt_celular.getText().toString());
+                usuario.setRating(0.0);
+                // usuario.setSpinner(spinner.getAccessibilityClassName().toString());
+                usuario.setFechadecumpleaños(edt_fechadenacimiento.getText().toString());
+                usuario.setFechadecreacion(fechacreacion.getText().toString());
+                usuario.setFechaactualizacion(fechaactualizacion.getText().toString());
+
+                studentInfoRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                        .setValue(usuario)
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                dialog.dismiss();
+                                Toast.makeText(Splash.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(Splash.this, "Registrado correctamente!!", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                    }
+                });
             }
 
-
-            Usuario usuario = new Usuario();
-            usuario.setUid(user.getUid());
-            usuario.setNombre(edt_nombre.getText().toString());
-            usuario.setApellido(edt_apellido.getText().toString());
-            usuario.setCelular(edt_celular.getText().toString());
-           // usuario.setSpinner(spinner.getAccessibilityClassName().toString());
-            usuario.setFechadecumpleaños(edt_fechadenacimiento.getText().toString());
-            usuario.setFechadecreacion(fechacreacion.getText().toString());
-            usuario.setFechaactualizacion(fechaactualizacion.getText().toString());
-
-            studentInfoRef.child(user.getUid()).setValue(usuario).addOnCompleteListener(task -> {  //************************** cambiar a nombre
-                if (task.isSuccessful()){
-                    dialog.dismiss();
-                    Toast.makeText(this, "Registro Completo!! :) ", Toast.LENGTH_SHORT).show();
-                    goToHomeActivity(usuario);
-                    Intent homeIntent = new Intent(Splash.this,Dashboard.class);
-                    //Comun.actualUsuario = localUser;
-                    startActivity(homeIntent);
-                    finish();
-                }
-            });
         });
     }
 
