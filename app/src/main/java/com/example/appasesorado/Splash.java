@@ -117,7 +117,7 @@ public class Splash extends AppCompatActivity {
     }
 
     private void delaySplashScreen() {
-        Completable.timer(5, TimeUnit.SECONDS,
+        Completable.timer(1, TimeUnit.SECONDS,
                 AndroidSchedulers.mainThread())
                 .subscribe(new Action() {
                     @Override
