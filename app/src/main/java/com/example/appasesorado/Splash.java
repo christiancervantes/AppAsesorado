@@ -4,8 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -13,6 +18,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.appasesorado.Comun.Comun;
@@ -22,6 +28,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.firebase.ui.auth.AuthMethodPickerLayout;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
@@ -52,7 +59,7 @@ public class Splash extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener listener;
 
-
+    Button btn_salir;
 
     @Override
     protected void onStart() {
@@ -76,27 +83,27 @@ public class Splash extends AppCompatActivity {
     }
 
 
-
     private void init() {
+
+
         providers = Arrays.asList(
                 new AuthUI.IdpConfig.PhoneBuilder().build(),
-                new AuthUI.IdpConfig.GoogleBuilder().build()
-               //,new AuthUI.IdpConfig.FacebookBuilder().build()
-        );
+                new AuthUI.IdpConfig.FacebookBuilder().build(),
+                new AuthUI.IdpConfig.GoogleBuilder().build());
 
+        //showSignInOptions();
 
         firebaseAuth = FirebaseAuth.getInstance();
-        listener = myFirebaseAuth -> {
+
+        listener = myFirebaseAuth -> { //
             FirebaseUser user = myFirebaseAuth.getCurrentUser();
             if ( user != null)
                 //delaySplashScreen();
                 Toast.makeText(this, "Bienvenido: "+user.getUid(), Toast.LENGTH_SHORT).show();
             else
                 showLogin();
-
         };
     }
-
 
 
     private void showLogin() {
@@ -117,7 +124,7 @@ public class Splash extends AppCompatActivity {
     }
 
     private void delaySplashScreen() {
-        Completable.timer(5, TimeUnit.SECONDS,
+        Completable.timer(1, TimeUnit.SECONDS,
                 AndroidSchedulers.mainThread())
                 .subscribe(new Action() {
                     @Override
@@ -136,6 +143,7 @@ public class Splash extends AppCompatActivity {
             IdpResponse response = IdpResponse.fromResultIntent(data);
             if (resultCode == RESULT_OK){
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
             }else{
                 Toast.makeText(this, "[Error]: "+response.getError().getMessage(), Toast.LENGTH_SHORT).show();
             }
