@@ -87,8 +87,8 @@ public class Splash extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener listener;
 
-   //@BindView(R.id.progress_bar)
-    //ProgressBar progress_bar;
+   @BindView(R.id.progress_bar)
+    ProgressBar progress_bar;
 
     //database
     FirebaseDatabase database;
@@ -111,6 +111,7 @@ public class Splash extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_splash);
 
     init();
 
@@ -281,7 +282,7 @@ public class Splash extends AppCompatActivity {
 
     private void delaySplashScreen() {
 
-        //progress_bar.setVisibility(View.VISIBLE);
+        progress_bar.setVisibility(View.VISIBLE);
 
         Completable.timer(3, TimeUnit.SECONDS,
                 AndroidSchedulers.mainThread())
