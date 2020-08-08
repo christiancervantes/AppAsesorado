@@ -141,7 +141,6 @@ public class Splash extends AppCompatActivity {
 
     }
 
-
     private void init() {
 
         ButterKnife.bind(this);
@@ -162,13 +161,13 @@ public class Splash extends AppCompatActivity {
             FirebaseUser user = myFirebaseAuth.getCurrentUser();
             if ( user != null)
                 //delaySplashScreen();
-               checkUserFromFirebase();
+               checkUserFromFirebase(user);
             else
                 showLogin();
         };
     }
 
-    private void checkUserFromFirebase() {
+    private void checkUserFromFirebase(FirebaseUser user) {
         studentInfoRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -179,7 +178,7 @@ public class Splash extends AppCompatActivity {
                             goToHomeActivity(usuario);
 
                         }else{
-                           showRegisterLayout();
+                           showRegisterLayout(user);
                         }
                     }
 
@@ -190,7 +189,7 @@ public class Splash extends AppCompatActivity {
                 });
     }
 
-    private void showRegisterLayout() {
+    private void showRegisterLayout(FirebaseUser user) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.DialogTheme);
         LayoutInflater inflater = getLayoutInflater(); //-----cambio 1
@@ -265,7 +264,7 @@ public class Splash extends AppCompatActivity {
             }else{
 
                 Usuario usuario = new Usuario();
-
+                usuario.setUid(user.getUid());
                 usuario.setNombre(edt_nombre.getText().toString());
                 usuario.setCelular(edt_celular.getText().toString());
                 usuario.setRating(0.0);
@@ -330,6 +329,7 @@ public class Splash extends AppCompatActivity {
 
     private void goToHomeActivity(Usuario usuario) {
         Comun.actualUsuario = usuario; //init value
+        Toast.makeText(this, "Bienvenido " +usuario.getNombre(), Toast.LENGTH_SHORT).show();
         startActivity(new Intent(Splash.this,Dashboard.class));
         finish();
     }

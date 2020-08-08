@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">AppAsesorado</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
+    <string name="title_home">Buscar curso</string>
+    <string name="title_dashboard">Mi Pefil</string>
     <string name="title_notifications">Notifications</string>
 
     <string name="facebook_app_id">3177272112327615</string>
