@@ -4,13 +4,14 @@
     <string name="title_dashboard">Mi Pefil</string>
     <string name="title_notifications">Notifications</string>
 
-    <string name="facebook_app_id">3177272112327615</string>
-    <string name="fb_login_protocol_scheme">fb3177272112327615</string>
+
+    <string name="facebook_app_id">341381286868732</string>
+    <string name="fb_login_protocol_scheme">fb341381286868732</string>
 
 
-    <string name="facebook_application_id" translatable="false">3177272112327615</string>
+    <string name="facebook_application_id" translatable="false">341381286868732</string>
     <!-- Facebook Application ID, prefixed by 'fb'. Enables Chrome Custom tabs. -->
-    <string name="facebook_login_protocol_scheme" translatable="false">fb3177272112327615</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb341381286868732</string>
 
 
     <string-array name="lista">
