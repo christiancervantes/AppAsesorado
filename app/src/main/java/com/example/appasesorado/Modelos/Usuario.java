@@ -2,17 +2,16 @@ package com.example.appasesorado.Modelos;
 
 public
 class Usuario {
-    private String uid,nombre,apellido,celular,spinner;
+    private String uid,nombre,celular,spinner;
     private String fechadecumpleaños,fechadecreacion,fechaactualizacion;
     private double rating;
 
     public Usuario() {
     }
 
-    public Usuario(String uid, String nombre, String apellido, String celular, String spinner, String fechadecumpleaños, String fechadecreacion, String fechaactualizacion, double rating) {
+    public Usuario(String uid, String nombre, String celular, String spinner, String fechadecumpleaños, String fechadecreacion, String fechaactualizacion, double rating) {
         this.uid = uid;
         this.nombre = nombre;
-        this.apellido = apellido;
         this.celular = celular;
         this.spinner = spinner;
         this.fechadecumpleaños = fechadecumpleaños;
@@ -21,13 +20,6 @@ class Usuario {
         this.rating = rating;
     }
 
-    public String getApellido() {
-        return apellido;
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
 
     public String getUid() {
         return uid;

@@ -12,8 +12,12 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +47,8 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -55,6 +61,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -88,7 +96,7 @@ public class Splash extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener listener;
 
-    @BindView(R.id.progress_bar)
+   @BindView(R.id.progress_bar)
     ProgressBar progress_bar;
 
     //database
@@ -112,6 +120,21 @@ public class Splash extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    "com.example.appasesorado",                  //Insert your own package name.
+                    PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+
+        } catch (NoSuchAlgorithmException e) {
+
+        }
         setContentView(R.layout.activity_splash);
 
         init();
@@ -125,6 +148,7 @@ public class Splash extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance();
         studentInfoRef = database.getReference(Comun.STUDENT_INFO_REF);
+
 
         providers = Arrays.asList(
                 new AuthUI.IdpConfig.PhoneBuilder().build(),
@@ -145,36 +169,35 @@ public class Splash extends AppCompatActivity {
     }
 
     private void checkUserFromFirebase(FirebaseUser user) {
-        studentInfoRef.child(user.getUid())
+        studentInfoRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()) {
-                            Toast.makeText(Splash.this, "Ingreso", Toast.LENGTH_SHORT).show();
-                            Intent homeIntent = new Intent(Splash.this, MainActivity.class);
-                            //Comun.actualUsuario = localUser;
-                            startActivity(homeIntent);
-                            finish();
-                        } else {
-                            showRegisterLayout(user);
+                        if (snapshot.exists()){
+                            //Toast.makeText(Splash.this, "Ingreso", Toast.LENGTH_SHORT).show();
+                            Usuario usuario = snapshot.getValue(Usuario.class);
+                            goToHomeActivity(usuario);
+
+                        }else{
+                           showRegisterLayout(user);
                         }
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-                        Toast.makeText(Splash.this, "" + error.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Splash.this, ""+error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
     private void showRegisterLayout(FirebaseUser user) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.DialogTheme);
         LayoutInflater inflater = getLayoutInflater(); //-----cambio 1
         builder.setCancelable(false);
-        builder.setTitle("Registro");
+        builder.setTitle("Registro de datos");
 
-        View itemView = LayoutInflater.from(this).inflate(R.layout.layout_register, null);
+        View itemView = LayoutInflater.from(this).inflate(R.layout.layout_register,null);
 
         builder.setView(itemView);
         final AlertDialog dialog = builder.create();
@@ -182,7 +205,6 @@ public class Splash extends AppCompatActivity {
 
 
         EditText edt_nombre = (EditText) itemView.findViewById(R.id.edt_nombre);
-        EditText edt_apellido = (EditText) itemView.findViewById(R.id.edt_apellido);
         EditText edt_celular = (EditText) itemView.findViewById(R.id.edt_phone);
 
         //Spinner spinner = (Spinner) itemView.findViewById(R.id.spinner_registro);
@@ -196,72 +218,81 @@ public class Splash extends AppCompatActivity {
             final Calendar calendar = Calendar.getInstance();
             DatePickerDialog datePickerDialog = new DatePickerDialog(Splash.this, (datePicker, year, mes, dia) -> {
                 Calendar calendarResultado = Calendar.getInstance();
-                calendarResultado.set(Calendar.YEAR, year);
-                calendarResultado.set(Calendar.MONTH, mes);
-                calendarResultado.set(Calendar.DAY_OF_MONTH, dia);
+                calendarResultado.set(Calendar.YEAR,year);
+                calendarResultado.set(Calendar.MONTH,mes);
+                calendarResultado.set(Calendar.DAY_OF_MONTH,dia);
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
                 Date date = calendarResultado.getTime();
                 //String fechaDeNacimientoTexto = simpleDateFormat.format(date);
                 fechadenac = simpleDateFormat.format(date);
                 edt_fechadenacimiento.setText(fechadenac);
-            }, calendar.get(Calendar.YEAR) - 18, calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+            },calendar.get(Calendar.YEAR)-18,calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH));
             datePickerDialog.show();
         });
 
 
+
         //sacar fecha y hora de la cuenta creada
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd 'de' MMMM 'del' yyyy hh:mm:ss aaa", Locale.getDefault());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd 'de' MMMM 'del' yyyy hh:mm:ss aaa",Locale.getDefault());
         String fechacreada = dateFormat.format(new Date());
-        fechacreacion = dialog.findViewById(R.id.fechacreacion);
+        fechacreacion =dialog.findViewById(R.id.fechacreacion);
         fechacreacion.setText(fechacreada);
 
         //fechadeactualizacion
-        SimpleDateFormat dateFormat1 = new SimpleDateFormat("EEEE, dd-MM-yyyy hh:mm:ss aaa", Locale.getDefault());
+        SimpleDateFormat dateFormat1 = new SimpleDateFormat("EEEE, dd-MM-yyyy hh:mm:ss aaa",Locale.getDefault());
         String fechacreada1 = dateFormat1.format(new Date());
-        fechaactualizacion = dialog.findViewById(R.id.fechaactualizacion);
+        fechaactualizacion =dialog.findViewById(R.id.fechaactualizacion);
         fechaactualizacion.setText(fechacreada1);
 
 
         //ya pone el celular de usuario registrado
-        edt_celular.setText(user.getPhoneNumber());
+        if(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber() != null &&
+        !TextUtils.isEmpty(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber())){
+            edt_celular.setText(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+        } else{
+            edt_celular.setHint("Ingrese su celular");
+        }
 
 
-        TextView txt_registrar = itemView.findViewById(R.id.btn_continuar);
-        txt_registrar.setOnClickListener(v -> {
+        Button btn_continuar = itemView.findViewById(R.id.btn_continuar);
+        btn_continuar.setOnClickListener(v -> {
 
-            if (TextUtils.isEmpty(edt_nombre.getText().toString())) {
-                Toast.makeText(this, "Ingrese su nombre por favor", Toast.LENGTH_SHORT).show();
+            if (TextUtils.isEmpty(edt_nombre.getText().toString())){
+                Toast.makeText(this, "Ingrese su nombre y apellido por favor", Toast.LENGTH_SHORT).show();
                 return;
-            } else if (TextUtils.isEmpty(edt_apellido.getText().toString())) {
-                Toast.makeText(this, "Ingrese su apellido por favor", Toast.LENGTH_SHORT).show();
-                return;
-            } else if (TextUtils.isEmpty(edt_fechadenacimiento.getText().toString())) {
+            }else if (TextUtils.isEmpty(edt_fechadenacimiento.getText().toString())){
                 Toast.makeText(this, "Ingrese su fecha de Nacimiento porfavor", Toast.LENGTH_SHORT).show();
                 return;
+            }else{
+
+                Usuario usuario = new Usuario();
+                usuario.setUid(user.getUid());
+                usuario.setNombre(edt_nombre.getText().toString());
+                usuario.setCelular(edt_celular.getText().toString());
+                usuario.setRating(0.0);
+                // usuario.setSpinner(spinner.getAccessibilityClassName().toString());
+                usuario.setFechadecumpleaños(edt_fechadenacimiento.getText().toString());
+                usuario.setFechadecreacion(fechacreacion.getText().toString());
+                usuario.setFechaactualizacion(fechaactualizacion.getText().toString());
+
+                studentInfoRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                        .setValue(usuario)
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                dialog.dismiss();
+                                Toast.makeText(Splash.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(Splash.this, "Registrado correctamente!!", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                        goToHomeActivity(usuario);
+                    }
+                });
             }
 
-
-            Usuario usuario = new Usuario();
-            usuario.setUid(user.getUid());
-            usuario.setNombre(edt_nombre.getText().toString());
-            usuario.setApellido(edt_apellido.getText().toString());
-            usuario.setCelular(edt_celular.getText().toString());
-            // usuario.setSpinner(spinner.getAccessibilityClassName().toString());
-            usuario.setFechadecumpleaños(edt_fechadenacimiento.getText().toString());
-            usuario.setFechadecreacion(fechacreacion.getText().toString());
-            usuario.setFechaactualizacion(fechaactualizacion.getText().toString());
-
-            studentInfoRef.child(user.getUid()).setValue(usuario).addOnCompleteListener(task -> {  //************************** cambiar a nombre
-                if (task.isSuccessful()) {
-                    dialog.dismiss();
-                    Toast.makeText(this, "Registro Completo!! :) ", Toast.LENGTH_SHORT).show();
-                    goToHomeActivity(usuario);
-                    Intent homeIntent = new Intent(Splash.this, MainActivity.class);
-                    //Comun.actualUsuario = localUser;
-                    startActivity(homeIntent);
-                    finish();
-                }
-            });
         });
     }
 
@@ -274,12 +305,12 @@ public class Splash extends AppCompatActivity {
                 .build();
 
         startActivityForResult(AuthUI.getInstance()
-                .createSignInIntentBuilder()
-                .setAuthMethodPickerLayout(authMethodPickerLayout)
-                .setIsSmartLockEnabled(false)
+        .createSignInIntentBuilder()
+        .setAuthMethodPickerLayout(authMethodPickerLayout)
+        .setIsSmartLockEnabled(false)
                 .setTheme(R.style.LoginTheme)
-                .setAvailableProviders(providers)
-                .build(), LOGIN_REQUEST_CODE);
+        .setAvailableProviders(providers)
+        .build(),LOGIN_REQUEST_CODE);
     }
 
     private void delaySplashScreen() {
@@ -297,14 +328,16 @@ public class Splash extends AppCompatActivity {
     }
 
     private void goToHomeActivity(Usuario usuario) {
-        Comun.actualUsuario = usuario;
-
+        Comun.actualUsuario = usuario; //init value
+        Toast.makeText(this, "Bienvenido " +usuario.getNombre(), Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(Splash.this,MainActivity.class));
+        finish();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == LOGIN_REQUEST_CODE) {
+        if (requestCode == LOGIN_REQUEST_CODE){
             IdpResponse response = IdpResponse.fromResultIntent(data);
             if (resultCode == RESULT_OK){
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

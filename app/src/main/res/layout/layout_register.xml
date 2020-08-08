@@ -43,102 +43,91 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.024"></TextView>
 
-    <EditText
+
+    <com.rengwuxian.materialedittext.MaterialEditText
         android:id="@+id/edt_nombre"
+        android:hint="Ingrese su Nombres y Apellidos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/boton4"
-        android:hint="Ingrese tu nombre"
-        android:imeActionLabel="Siguiente"
-        android:imeOptions="actionNext"
-        android:inputType="textCapWords"
         android:singleLine="true"
-        android:textAlignment="center"
-        android:textColor="@color/negro"
+        android:imeOptions="actionNext"
+        android:imeActionLabel= "Siguiente"
+        android:inputType="textCapWords"
+        android:textColorHint="@android:color/black"
+        android:textColor="@android:color/black"
         android:textSize="20dp"
+        app:met_floatingLabelTextSize="17dp"
+        app:met_baseColor="@android:color/black"
+        app:met_floatingLabel="highlight"
+        app:met_primaryColor="@android:color/black"
+        app:met_singleLineEllipsis="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.082"></EditText>
+        app:layout_constraintVertical_bias="0.082"/>
 
-    <EditText
-        android:id="@+id/edt_apellido"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/boton4"
-        android:hint="Ingrese tu apellido"
-        android:imeActionLabel="Siguiente"
-        android:imeOptions="actionNext"
-        android:inputType="textCapWords"
-        android:singleLine="true"
-        android:textAlignment="center"
-        android:textColor="@color/negro"
-        android:textSize="20dp"
 
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edt_nombre"></EditText>
-
-    <EditText
+    <com.rengwuxian.materialedittext.MaterialEditText
         android:id="@+id/edt_phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/boton4"
-        android:clickable="false"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:hint="+51 999888777"
         android:imeActionLabel="Siguiente"
-        android:imeOptions="actionNext"
+        android:imeOptions="actionDone"
         android:inputType="textCapWords"
         android:singleLine="true"
-        android:textAlignment="center"
-        android:textColor="@color/negro"
-        android:textColorHint="@color/negro"
+        android:hint=""
+        android:textColor="@android:color/black"
+        android:textColorHint="@android:color/black"
         android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edt_apellido"></EditText>
+        app:layout_constraintTop_toBottomOf="@+id/edt_nombre"
+        app:layout_constraintVertical_bias="0.058"
+        app:met_baseColor="@android:color/black"
+        app:met_floatingLabel="highlight"
+        app:met_floatingLabelTextSize="17dp"
+        app:met_primaryColor="@android:color/black"
+        app:met_singleLineEllipsis="true" />
 
-
-    <EditText
+    <com.rengwuxian.materialedittext.MaterialEditText
         android:id="@+id/edt_fechadenacimiento"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="21dp"
-        android:background="@drawable/boton4"
-        android:clickable="false"
+        android:layout_marginTop="24dp"
+        android:clickable="true"
         android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:hint="Ingrese su Fecha de Nacimiento"
+        android:hint="Ingrese su Fecha de Cumpleaños"
         android:inputType="date"
-        android:textAlignment="center"
         android:textColor="@android:color/black"
+        android:textColorHint="@android:color/black"
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.156"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edt_phone"></EditText>
+        app:layout_constraintTop_toBottomOf="@+id/edt_phone"
+        app:met_baseColor="@android:color/black"
+        app:met_floatingLabel="highlight"
+        app:met_floatingLabelTextSize="17dp"
+        app:met_primaryColor="@android:color/black"
+        app:met_singleLineEllipsis="true"></com.rengwuxian.materialedittext.MaterialEditText>
 
     <Button
         android:id="@+id/btn_continuar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="108dp"
-        android:background="@drawable/boton1"
+        android:layout_marginTop="232dp"
+        android:background="@color/negro"
         android:fontFamily="@font/belleza"
         android:text="Continuar"
-
         android:textColor="@color/blanco"
         android:textSize="17dp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edt_fechadenacimiento"></Button>
+        app:layout_constraintTop_toBottomOf="@+id/edt_fechadenacimiento"
+        app:layout_constraintVertical_bias="0.0"></Button>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
