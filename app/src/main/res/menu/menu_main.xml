@@ -2,13 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_search"
-        android:icon="@drawable/ic_search2"
-        android:title="search"
+        android:id="@+id/action_logout"
+        android:icon="@drawable/ic_back"
+        android:title="Logout"
         android:visible="true"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="always" />
-    <item
+  <!--  <item
         android:id="@+id/action_post"
         android:icon="@drawable/ic_addpost"
         android:title="logout"
@@ -38,7 +37,7 @@
         android:title="Usuarios"
         android:visible="true"
         app:showAsAction="always" />
-
+-->
 
 
 

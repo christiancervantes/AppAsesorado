@@ -12,4 +12,5 @@
   <color name="negro">#000000</color>
   <color name="plomo">#9c9c9c</color>
   <color name="rojo">#FF0000</color>
+    <color name="colorWhite">#FFFFFF</color>
 </resources>
