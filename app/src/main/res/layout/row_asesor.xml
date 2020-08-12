@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:weightSum="14">
+
+    <LinearLayout
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="7dp"
+        android:layout_weight="10"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txt_comment_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/brandon_medium"
+            android:text="Nombre"
+            android:textColor="@color/negro"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/txt_skill_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/brandon_medium"
+            android:text="Skill's"
+            android:textColor="@color/negro"
+            android:textSize="18sp" />
+
+        <RatingBar
+            android:id="@+id/rating_bar"
+            style="?attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:progressBackgroundTint="@color/colorPrimary" />
+
+        <TextView
+            android:id="@+id/txt_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/brandon_medium"
+            android:text="Comentario"
+            android:textColor="@color/negro"
+            android:textSize="22sp"
+            android:textStyle="italic" />
+
+        <!--botones para finalizar asesoria y cancelar, agregar diseño-->
+        <LinearLayout
+            android:id="@+id/linearbotones"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:padding="2dp">
+
+            <Button
+
+                android:id="@+id/cancelarasesoria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:backgroundTint="#D7443E"
+                android:drawableStart="@drawable/cancel"
+                android:fontFamily="@font/brandon_medium"
+                android:text="  Cancelar"
+                android:textColor="#D5D2D2"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:visibility="gone">
+
+            </Button>
+
+            <Button
+                android:id="@+id/finishasedsoria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:backgroundTint="@color/plomo"
+                android:drawableStart="@drawable/ic_complete"
+                android:fontFamily="@font/brandon_medium"
+                android:text="  Finalizar"
+                android:textColor="#D5D2D2"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:visibility="gone">
+
+            </Button>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/tvwas"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_vertical|end"
+        android:layout_marginStart="10dp"
+        android:layout_weight="4"
+        android:orientation="vertical"
+        android:src="@drawable/whatsappblack">
+
+
+    </ImageView>
+
+</LinearLayout>
