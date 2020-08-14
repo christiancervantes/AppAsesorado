@@ -72,5 +72,5 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
     //recyclew
     implementation 'com.rengwuxian.materialedittext:library:2.1.4'
-
+    implementation 'com.mikhaellopez:circularimageview:4.2.0'
 }
