@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -71,33 +72,34 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
             String timeStamp = String.valueOf(System.currentTimeMillis());
 
             boolean installed = appInstalledOrNot("com.whatsapp");
-            // if (installed) {
-            HashMap<String, Object> asesoria = new HashMap<>();
-            asesoria.put("asesor", "" + aseuid);
-            asesoria.put("estudiante", "" + uid);
-            asesoria.put("timeStamp", "" + timeStamp);
-            asesoria.put("estado", "" + "en asesoria");
-            DatabaseReference referenceaseasoria = FirebaseDatabase.getInstance().getReference("asesorias");
-            referenceaseasoria.child(timeStamp).setValue(asesoria).addOnSuccessListener(aVoid -> {
-                //REVISAR ESTO
-                DatabaseReference dbref = FirebaseDatabase.getInstance().getReference("asesores").child(aseuid);
-                HashMap<String, Object> hashMap = new HashMap<>();
-                hashMap.put("estado", "en asesoria");
-                //estado del usuario
-                dbref.updateChildren(hashMap);
-                // Intent intentWS = new Intent(Intent.ACTION_VIEW);
-                // intentWS.setData(Uri.parse("http://api.whatsapp.com/send?phone=" + "+51" + celular + "&text=" + ""));
-                //context.startActivity(intentWS);
-            }).addOnFailureListener(e -> {
-                Toast.makeText(context, "No se ha podido contactar al asesor", Toast.LENGTH_SHORT).show();
-            });
+            if (installed) {
+                //Guardar la asesoria dentro de la base de datos
+                HashMap<String, Object> asesoria = new HashMap<>();
+                asesoria.put("asesor", "" + aseuid);
+                asesoria.put("estudiante", "" + uid);
+                asesoria.put("timeStamp", "" + timeStamp);
+                asesoria.put("estado", "" + "en asesoria");
+                DatabaseReference referenceaseasoria = FirebaseDatabase.getInstance().getReference("asesorias");
+                referenceaseasoria.child(timeStamp).setValue(asesoria).addOnSuccessListener(aVoid -> {
+                    //actualizar estado del asesor
+                    DatabaseReference dbref = FirebaseDatabase.getInstance().getReference("asesores").child(aseuid);
+                    HashMap<String, Object> hashMap = new HashMap<>();
+                    hashMap.put("estado", "en asesoria");
+                    dbref.updateChildren(hashMap);
+                    //Intent para abrir whatsapp
+                    Intent intentWS = new Intent(Intent.ACTION_VIEW);
+                    intentWS.setData(Uri.parse("http://api.whatsapp.com/send?phone=" + "+51" + celular + "&text=" + ""));
+                    context.startActivity(intentWS);
+                }).addOnFailureListener(e -> {
+                    Toast.makeText(context, "No se ha podido contactar al asesor", Toast.LENGTH_SHORT).show();
+                });
 
-            //} else {
-            //  Toast.makeText(context, "WhatsApp no esta instalado en su dipositivo.", Toast.LENGTH_SHORT).show();
-            //}
+            } else {
+                Toast.makeText(context, "WhatsApp no esta instalado en su dipositivo.", Toast.LENGTH_SHORT).show();
+            }
 
         });
-
+//Cargar las asesorias registradas por el usuario
         Query query = FirebaseDatabase.getInstance().getReference("asesorias").orderByChild("estudiante").equalTo(uid);
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -122,19 +124,16 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
             }
         });
 
-        //Visibilidad de botones
-
-
+        //Accion de completar asesoria
         myHolder.completarasesoria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//REVISAR ESTO
+                //actulizar estado de la asesoria
                 DatabaseReference dbref = FirebaseDatabase.getInstance().getReference("asesores").child(aseuid);
                 HashMap<String, Object> hashMap = new HashMap<>();
                 hashMap.put("estado", "finish asesoria");
-                //estado del usuario
                 dbref.updateChildren(hashMap);
-
+                //carga vista emergente para la valoracion
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setCancelable(true);
                 View itemView = LayoutInflater.from(context).inflate(R.layout.layout_valoracion, null);
@@ -142,12 +141,15 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
                 final AlertDialog dialog = builder.create();
                 dialog.show();
                 RatingBar ratingBar = itemView.findViewById(R.id.rating_bar_toset);
+                EditText txtcomment = itemView.findViewById(R.id.commenttxt);
                 Button btn_continuar = itemView.findViewById(R.id.btn_siguiente);
                 ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
                     @Override
                     public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
                         btn_continuar.setVisibility(View.VISIBLE);
+                        txtcomment.setVisibility(View.VISIBLE);
                         //colocar logica de suma y promedio de valoracion para el asesor(consultar antes la valoracion del asesor)
+
                     }
                 });
                 btn_continuar.setOnClickListener(new View.OnClickListener() {
@@ -165,8 +167,11 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
                 DatabaseReference dbref = FirebaseDatabase.getInstance().getReference("asesores").child(aseuid);
                 HashMap<String, Object> hashMap = new HashMap<>();
                 hashMap.put("estado", "no asesoria");
-                //estado del usuario
                 dbref.updateChildren(hashMap);
+
+                //falta agregar lo de remover de la base de datos al cancelar(yo lo pongo owo)
+                //falta lo de y lo de la valoracion agregar comentarios, sus vistas ya las cree estan arriba
+
             }
         });
     }

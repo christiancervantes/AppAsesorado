@@ -32,11 +32,28 @@
         android:progressBackgroundTint="@color/secondaryDarkColor"
         android:rating="0.0" />
 
+    <EditText
+        android:id="@+id/commenttxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/editextstyle"
+        android:gravity="start"
+        android:layout_marginTop="20dp"
+        android:visibility="invisible"
+        android:layout_margin="20dp"
+        android:hint="Ingresa un comentario"
+        android:inputType="textCapSentences|textMultiLine"
+        android:minHeight="120dp"
+        android:padding="10dp"
+        android:layout_below="@+id/rating_bar_toset">
+
+    </EditText>
+
     <Button
         android:id="@+id/btn_siguiente"
         android:layout_width="180dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rating_bar_toset"
+        android:layout_below="@+id/commenttxt"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         android:background="@drawable/corner"
