@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProfileFragment">
+    tools:context=".AsesorActivity">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="350dp"
         android:layout_centerHorizontal="true"
         android:layout_margin="10dp"
+        android:id="@+id/card_profile"
         app:cardElevation="10dp">
 
         <RelativeLayout
@@ -41,7 +42,7 @@
                 android:background="@drawable/corner">
 
                 <TextView
-                    android:id="@+id/txtnombre"
+                    android:id="@+id/txtnombrease"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
@@ -54,10 +55,10 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/txtcelular"
+                    android:id="@+id/txtcelularase"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/txtnombre"
+                    android:layout_below="@id/txtnombrease"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="20dp"
                     android:fontFamily="@font/brandon_medium"
@@ -67,10 +68,10 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/txtcumple"
+                    android:id="@+id/txtcumplease"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/txtcelular"
+                    android:layout_below="@id/txtcelularase"
                     android:layout_centerHorizontal="true"
                     android:layout_gravity="center"
                     android:layout_marginTop="20dp"
@@ -86,6 +87,22 @@
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/card_profile"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview_asesor_profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="7"
+          />
+    </androidx.core.widget.NestedScrollView>
 
 </RelativeLayout>

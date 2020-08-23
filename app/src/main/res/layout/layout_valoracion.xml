@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/txtindicacion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:fontFamily="@font/brandon_medium"
+        android:gravity="center"
+        android:text="Por favor, valore la atención de su asesor en el siguiente panel"
+        android:textAlignment="center"
+        android:textColor="@color/negro"
+        android:textSize="20sp"
+        android:textStyle="bold">
+
+    </TextView>
+
+    <RatingBar
+        android:id="@+id/rating_bar_toset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtindicacion"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:numStars="5"
+        android:progressBackgroundTint="@color/secondaryDarkColor"
+        android:rating="0.0" />
+
+    <EditText
+        android:id="@+id/commenttxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/editextstyle"
+        android:gravity="start"
+        android:layout_marginTop="20dp"
+        android:visibility="invisible"
+        android:layout_margin="20dp"
+        android:hint="Ingresa un comentario"
+        android:inputType="textCapSentences|textMultiLine"
+        android:minHeight="120dp"
+        android:padding="10dp"
+        android:layout_below="@+id/rating_bar_toset">
+
+    </EditText>
+
+    <Button
+        android:id="@+id/btn_siguiente"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/commenttxt"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/corner"
+        android:backgroundTint="#272626"
+        android:fontFamily="@font/brandon_medium"
+        android:text="continuar"
+        android:textColor="@color/blanco"
+        android:textStyle="bold"
+        android:visibility="invisible"
+
+        >
+
+    </Button>
+
+</RelativeLayout>

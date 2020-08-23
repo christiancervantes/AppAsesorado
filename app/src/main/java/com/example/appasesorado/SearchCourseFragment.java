@@ -4,20 +4,43 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.example.appasesorado.Adaptadores.AdapterAsesor;
+import com.example.appasesorado.Modelos.Asesor;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SearchCourseFragment extends Fragment {
     FirebaseAuth firebaseAuth;
+    RecyclerView recyclerView;
+    AdapterAsesor adapterAsesor;
+    List<Asesor> AsesorList;
+    FirebaseDatabase firebaseDatabase;
+    SearchView searchView;
 
     public SearchCourseFragment() {
         // Required empty public constructor
@@ -36,8 +59,97 @@ public class SearchCourseFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_search_course, container, false);
+        recyclerView = view.findViewById(R.id.recyclerview_asesor);
         firebaseAuth = FirebaseAuth.getInstance();
+        searchView = view.findViewById(R.id.searchview);
+        //propiedades del recycler view
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+//iniciar lista de asesores
+        AsesorList = new ArrayList<>();
+//Obtener todos los asesores
+        getAllAsesors();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                //llamado  cuando el usuario presiona buscar desde el teclado
+                if (!TextUtils.isEmpty(s.trim())) {
+                    searchUsers(s);
+                } else {
+                    getAllAsesors();
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                if (!TextUtils.isEmpty(s.trim())) {
+                    searchUsers(s);
+
+                } else {
+                    getAllAsesors();
+                }
+                return false;
+            }
+        });
         return view;
+    }
+
+    private void getAllAsesors() {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("asesores");
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                AsesorList.clear();
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Asesor asesor = ds.getValue(Asesor.class);
+                    AsesorList.add(asesor);
+                    adapterAsesor = new AdapterAsesor(getActivity(), AsesorList);
+                    recyclerView.setAdapter(adapterAsesor);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void searchUsers(final String query) {
+        final FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("asesores");
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                AsesorList.clear();
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Asesor asesor = ds.getValue(Asesor.class);
+                    //obtener toda la data
+                    if (asesor.getNombre().toLowerCase().contains(query.toLowerCase()) ||
+                            asesor.getCurso().toLowerCase().contains(query.toLowerCase()) ||
+                            asesor.getValoracion().toLowerCase().contains(query.toLowerCase()) ||
+                            asesor.getSkill().toLowerCase().contains(query.toLowerCase())) {
+                        AsesorList.add(asesor);
+
+                    }
+
+                    //Adapter
+                    adapterAsesor = new AdapterAsesor(getActivity(), AsesorList);
+                    //refresh adapter
+                    adapterAsesor.notifyDataSetChanged();
+                    recyclerView.setAdapter(adapterAsesor);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
