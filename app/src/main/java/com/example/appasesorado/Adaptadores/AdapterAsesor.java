@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.media.Rating;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,9 +37,17 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 import java.util.List;
 
+import butterknife.BindView;
+
 public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> {
     Context context;
     List<Asesor> AsesorList;
+
+    Asesor asesor;
+
+    @BindView(R.id.rating_bar2)
+    RatingBar rating_bar2;
+
 
     public AdapterAsesor(Context context, List<Asesor> asesorList) {
         this.context = context;
@@ -59,15 +68,26 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
         String skill = AsesorList.get(position).getSkill();
         String celular = AsesorList.get(position).getCelular();
         String comentario = AsesorList.get(position).getComentario();
-        String valoracion = AsesorList.get(position).getValoracion();
+       // String valoracion = AsesorList.get(position).getValoracion();
+        //Double ratingValue = AsesorList.get(position).getRatingValue();
+       //Long ratingCount = AsesorList.get(position).getRatingCount();
+
+       //rating_bar2.setRating(ratingValue.floatValue()/ratingCount);
+
+
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         assert user != null;
         String uid = user.getUid();
         myHolder.namease.setText(nombre);
         myHolder.skillase.setText(skill);
+
+        if (AsesorList.get(position).getRatingValue() != null)
+        myHolder.rating_bar2.setRating(AsesorList.get(position).getRatingValue().floatValue()/AsesorList.get(position).getRatingCount());
+
         myHolder.comentase.setText(comentario);
-        myHolder.ratingBar.setRating(Float.parseFloat(valoracion));
-        myHolder.ratingBar.setIsIndicator(true);
+
+        //myHolder.rating_bar2.setIsIndicator(true);
+
         myHolder.celulartv.setOnClickListener(view -> {
             String timeStamp = String.valueOf(System.currentTimeMillis());
 
@@ -99,7 +119,7 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
             }
 
         });
-//Cargar las asesorias registradas por el usuario
+        //Cargar las asesorias registradas por el usuario
         Query query = FirebaseDatabase.getInstance().getReference("asesorias").orderByChild("estudiante").equalTo(uid);
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -196,7 +216,7 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
 
     public static class MyHolder extends RecyclerView.ViewHolder {
         TextView namease, skillase, comentase;
-        RatingBar ratingBar;
+        RatingBar rating_bar2 ;
         ImageView celulartv;
         Button completarasesoria;
         Button cancelarasesoria;
@@ -205,9 +225,9 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
         public MyHolder(@NonNull View itemView) {
             super(itemView);
             namease = itemView.findViewById(R.id.txt_comment_name);
-            skillase = itemView.findViewById(R.id.txt_skill_date);
+            skillase = itemView.findViewById(R.id.txt_skill);
             comentase = itemView.findViewById(R.id.txt_comment);
-            ratingBar = itemView.findViewById(R.id.rating_bar);
+            rating_bar2 = itemView.findViewById(R.id.rating_bar2);
             celulartv = itemView.findViewById(R.id.tvwas);
             completarasesoria = itemView.findViewById(R.id.finishasedsoria);
             cancelarasesoria = itemView.findViewById(R.id.cancelarasesoria);

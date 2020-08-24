@@ -1,14 +1,16 @@
 package com.example.appasesorado.Modelos;
 
-public class Usuario {
-    private String uid, nombre, celular, spinner;
-    private String fechadecumpleaños, fechadecreacion, fechaactualizacion;
-    private double rating;
+public
+class Usuario {
+    private String uid,nombre,celular,spinner;
+    private String fechadecumpleaños,fechadecreacion,fechaactualizacion;
+    private Double ratingValue;
+    private Long ratingCount;
 
     public Usuario() {
     }
 
-    public Usuario(String uid, String nombre, String celular, String spinner, String fechadecumpleaños, String fechadecreacion, String fechaactualizacion, double rating) {
+    public Usuario(String uid, String nombre, String celular, String spinner, String fechadecumpleaños, String fechadecreacion, String fechaactualizacion) {
         this.uid = uid;
         this.nombre = nombre;
         this.celular = celular;
@@ -16,7 +18,7 @@ public class Usuario {
         this.fechadecumpleaños = fechadecumpleaños;
         this.fechadecreacion = fechadecreacion;
         this.fechaactualizacion = fechaactualizacion;
-        this.rating = rating;
+
     }
 
 
@@ -68,12 +70,20 @@ public class Usuario {
         this.fechaactualizacion = fechaactualizacion;
     }
 
-    public double getRating() {
-        return rating;
+    public Double getRatingValue() {
+        return ratingValue;
     }
 
-    public void setRating(double rating) {
-        this.rating = rating;
+    public void setRatingValue(Double ratingValue) {
+        this.ratingValue = ratingValue;
+    }
+
+    public Long getRatingCount() {
+        return ratingCount;
+    }
+
+    public void setRatingCount(Long ratingCount) {
+        this.ratingCount = ratingCount;
     }
 
     public String getSpinner() {

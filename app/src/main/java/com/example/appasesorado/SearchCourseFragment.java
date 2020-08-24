@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +37,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+
 public class SearchCourseFragment extends Fragment {
     FirebaseAuth firebaseAuth;
     RecyclerView recyclerView;
@@ -42,6 +46,8 @@ public class SearchCourseFragment extends Fragment {
     List<Asesor> AsesorList;
     FirebaseDatabase firebaseDatabase;
     SearchView searchView;
+
+
 
     public SearchCourseFragment() {
         // Required empty public constructor
@@ -122,6 +128,9 @@ public class SearchCourseFragment extends Fragment {
         });
     }
 
+
+
+
     private void searchUsers(final String query) {
         final FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("asesores");
@@ -132,20 +141,19 @@ public class SearchCourseFragment extends Fragment {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Asesor asesor = ds.getValue(Asesor.class);
                     //obtener toda la data
-                    assert asesor != null;
-                    if (asesor.isVerificacion()) {
-                        if (asesor.getNombre().toLowerCase().contains(query.toLowerCase()) ||
-                                asesor.getCurso().toLowerCase().contains(query.toLowerCase()) ||
-                                asesor.getValoracion().toLowerCase().contains(query.toLowerCase()) ||
-                                asesor.getSkill().toLowerCase().contains(query.toLowerCase())) {
-                            AsesorList.add(asesor);
-                        }
-                        //Adapter
-                        adapterAsesor = new AdapterAsesor(getActivity(), AsesorList);
-                        //refresh adapter
-                        adapterAsesor.notifyDataSetChanged();
-                        recyclerView.setAdapter(adapterAsesor);
+                    if (asesor.getNombre().toLowerCase().contains(query.toLowerCase()) ||
+                            asesor.getCurso().toLowerCase().contains(query.toLowerCase()) ||
+                            asesor.getSkill().toLowerCase().contains(query.toLowerCase())) {
+
+                        AsesorList.add(asesor);
+
                     }
+
+                    //Adapter
+                    adapterAsesor = new AdapterAsesor(getActivity(), AsesorList);
+                    //refresh adapter
+                    adapterAsesor.notifyDataSetChanged();
+                    recyclerView.setAdapter(adapterAsesor);
 
                 }
             }
@@ -179,7 +187,7 @@ public class SearchCourseFragment extends Fragment {
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if (user != null) {
             //user is signed in stay here
-//set email of logged in user
+            //set email of logged in user
             //mProfileTV.setText(user.getEmail());
         } else {
             //user is signed in stay here
