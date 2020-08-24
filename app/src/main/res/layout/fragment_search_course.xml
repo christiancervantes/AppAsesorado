@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/blanco"
     android:padding="10dp"
     tools:context=".SearchCourseFragment">
 
@@ -35,8 +36,8 @@
         android:background="@drawable/searchch_line"
         android:fontFamily="@font/brandon_medium"
         android:inputType="textPersonName"
-
         android:paddingStart="10dp"
+
         android:textColor="@color/plomo"
         android:textColorHint="@color/plomo"
         android:textSize="20sp" />

@@ -73,7 +73,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/brandon_medium"
-                android:text="Confiabilidad:"
+                android:text="Tu confiabilidad:"
                 android:textColor="@color/negro"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -102,7 +102,7 @@
         android:background="@color/plomoclaro"
         android:layout_below="@id/card2"
         android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginStart="60dp"
         android:layout_marginEnd="60dp"
         android:layout_height="2dp"

@@ -88,7 +88,7 @@ public class ProfileFragment extends Fragment {
                     //set data
                     nameTv.setText(name);
 
-                        if (ratingValue!=null)
+                        if (ratingValue!=null && ratingCount !=null)
                             rating_bar3.setRating(ratingValue.floatValue()/ratingCount);
 
                     celulartv.setText(celular);
