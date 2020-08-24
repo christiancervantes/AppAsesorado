@@ -57,6 +57,13 @@
             android:stepSize="0.5"></RatingBar>
 
         <TextView
+            android:id="@+id/valoracion1"
+            android:text="4"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></TextView>
+
+        <TextView
             android:id="@+id/txt_comment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

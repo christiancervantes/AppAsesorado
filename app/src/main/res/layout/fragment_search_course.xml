@@ -37,7 +37,6 @@
         android:fontFamily="@font/brandon_medium"
         android:inputType="textPersonName"
         android:paddingStart="10dp"
-
         android:textColor="@color/plomo"
         android:textColorHint="@color/plomo"
         android:textSize="20sp" />

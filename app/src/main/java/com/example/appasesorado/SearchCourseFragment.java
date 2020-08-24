@@ -142,6 +142,7 @@ public class SearchCourseFragment extends Fragment {
                     //obtener toda la data
                     if (asesor.getNombre().toLowerCase().contains(query.toLowerCase()) ||
                             asesor.getCurso().toLowerCase().contains(query.toLowerCase()) ||
+                            asesor.getValoracion1().toString().contains(query.toLowerCase()) ||
                             asesor.getSkill().toLowerCase().contains(query.toLowerCase())) {
 
                         AsesorList.add(asesor);

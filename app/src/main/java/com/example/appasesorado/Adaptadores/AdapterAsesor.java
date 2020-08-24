@@ -68,11 +68,13 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
         String skill = AsesorList.get(position).getSkill();
         String celular = AsesorList.get(position).getCelular();
         String comentario = AsesorList.get(position).getComentario();
-       // String valoracion = AsesorList.get(position).getValoracion();
-        //Double ratingValue = AsesorList.get(position).getRatingValue();
-       //Long ratingCount = AsesorList.get(position).getRatingCount();
 
-       //rating_bar2.setRating(ratingValue.floatValue()/ratingCount);
+        Double ratingValue = AsesorList.get(position).getRatingValue();
+       Long ratingCount = AsesorList.get(position).getRatingCount();
+
+        float rating =ratingValue.floatValue()/ratingCount;
+
+        String valoracion1 = String.valueOf(rating);
 
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -80,7 +82,7 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
         String uid = user.getUid();
         myHolder.namease.setText(nombre);
         myHolder.skillase.setText(skill);
-
+        myHolder.valoracion1.setText(valoracion1);
         if (AsesorList.get(position).getRatingValue() != null)
         myHolder.rating_bar2.setRating(AsesorList.get(position).getRatingValue().floatValue()/AsesorList.get(position).getRatingCount());
 
@@ -218,6 +220,7 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
         TextView namease, skillase, comentase;
         RatingBar rating_bar2 ;
         ImageView celulartv;
+        TextView valoracion1;
         Button completarasesoria;
         Button cancelarasesoria;
 
@@ -228,6 +231,7 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
             skillase = itemView.findViewById(R.id.txt_skill);
             comentase = itemView.findViewById(R.id.txt_comment);
             rating_bar2 = itemView.findViewById(R.id.rating_bar2);
+            valoracion1 = itemView.findViewById(R.id.valoracion1);
             celulartv = itemView.findViewById(R.id.tvwas);
             completarasesoria = itemView.findViewById(R.id.finishasedsoria);
             cancelarasesoria = itemView.findViewById(R.id.cancelarasesoria);
