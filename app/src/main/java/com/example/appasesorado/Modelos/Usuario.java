@@ -1,9 +1,8 @@
 package com.example.appasesorado.Modelos;
 
-public
-class Usuario {
-    private String uid,nombre,celular,spinner;
-    private String fechadecumpleaños,fechadecreacion,fechaactualizacion;
+public class Usuario {
+    private String uid, nombre, celular, spinner;
+    private String fechadecumpleaños, fechadecreacion, fechaactualizacion;
     private double rating;
 
     public Usuario() {

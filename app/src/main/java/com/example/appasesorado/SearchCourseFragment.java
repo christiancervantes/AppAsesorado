@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.appasesorado.Adaptadores.AdapterAsesor;
 import com.example.appasesorado.Modelos.Asesor;
@@ -104,10 +105,13 @@ public class SearchCourseFragment extends Fragment {
                 AsesorList.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Asesor asesor = ds.getValue(Asesor.class);
-                    AsesorList.add(asesor);
-                    adapterAsesor = new AdapterAsesor(getActivity(), AsesorList);
-                    recyclerView.setAdapter(adapterAsesor);
-
+                    assert asesor != null;
+                    if (asesor.isVerificacion()) {
+                        AsesorList.add(asesor);
+                        adapterAsesor = new AdapterAsesor(getActivity(), AsesorList);
+                        recyclerView.setAdapter(adapterAsesor);
+                    } else {
+                    }
                 }
             }
 
@@ -128,19 +132,20 @@ public class SearchCourseFragment extends Fragment {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Asesor asesor = ds.getValue(Asesor.class);
                     //obtener toda la data
-                    if (asesor.getNombre().toLowerCase().contains(query.toLowerCase()) ||
-                            asesor.getCurso().toLowerCase().contains(query.toLowerCase()) ||
-                            asesor.getValoracion().toLowerCase().contains(query.toLowerCase()) ||
-                            asesor.getSkill().toLowerCase().contains(query.toLowerCase())) {
-                        AsesorList.add(asesor);
-
+                    assert asesor != null;
+                    if (asesor.isVerificacion()) {
+                        if (asesor.getNombre().toLowerCase().contains(query.toLowerCase()) ||
+                                asesor.getCurso().toLowerCase().contains(query.toLowerCase()) ||
+                                asesor.getValoracion().toLowerCase().contains(query.toLowerCase()) ||
+                                asesor.getSkill().toLowerCase().contains(query.toLowerCase())) {
+                            AsesorList.add(asesor);
+                        }
+                        //Adapter
+                        adapterAsesor = new AdapterAsesor(getActivity(), AsesorList);
+                        //refresh adapter
+                        adapterAsesor.notifyDataSetChanged();
+                        recyclerView.setAdapter(adapterAsesor);
                     }
-
-                    //Adapter
-                    adapterAsesor = new AdapterAsesor(getActivity(), AsesorList);
-                    //refresh adapter
-                    adapterAsesor.notifyDataSetChanged();
-                    recyclerView.setAdapter(adapterAsesor);
 
                 }
             }

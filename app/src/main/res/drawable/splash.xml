@@ -2,11 +2,12 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:drawable="@color/blanco" />
     <item>
-<bitmap android:src="@drawable/logoapp2" android:gravity="center">
+        <bitmap
+            android:gravity="center"
+            android:src="@drawable/logoapp2">
 
-</bitmap>
+        </bitmap>
     </item>
-
 
 
 </layer-list>
