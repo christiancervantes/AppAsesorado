@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if (user != null) {
             //user is signed in stay here
-//set email of logged in user
+    //set email of logged in user
             //mProfileTV.setText(user.getEmail());
         } else {
             //user is signed in stay here

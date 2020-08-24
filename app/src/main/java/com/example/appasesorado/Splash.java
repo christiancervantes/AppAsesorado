@@ -5,10 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.appasesorado.Modelos.Usuario;
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -21,38 +18,19 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.appasesorado.Comun.Comun;
-import com.facebook.AccessToken;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 import com.firebase.ui.auth.AuthMethodPickerLayout;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -63,15 +41,12 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -79,7 +54,6 @@ import butterknife.ButterKnife;
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
-import io.reactivex.schedulers.Schedulers;
 
 public class Splash extends AppCompatActivity {
 
@@ -89,6 +63,7 @@ public class Splash extends AppCompatActivity {
     private String fechadenac;
     TextView fechacreacion;
     TextView fechaactualizacion;
+    TextView txtTerminos;
 
     //autenficacion
     //prueba1
@@ -206,6 +181,41 @@ public class Splash extends AppCompatActivity {
 
         EditText edt_nombre = (EditText) itemView.findViewById(R.id.edt_nombre);
         EditText edt_celular = (EditText) itemView.findViewById(R.id.edt_phone);
+        CheckBox cbxterminos = (CheckBox) itemView.findViewById(R.id.cbxterminos);
+
+           cbxterminos.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View view) {
+                   if (cbxterminos.isChecked()){
+                       AlertDialog.Builder popup = new AlertDialog.Builder(Splash.this);
+                       LayoutInflater Inflater2 = getLayoutInflater();
+                       popup.setCancelable(false);
+                       popup.setTitle("Términos y Cóndiciones");
+                       View itemView2 = LayoutInflater.from(getBaseContext()).inflate(R.layout.layout_terminos,null);
+
+                       popup.setView(itemView2);
+                       final AlertDialog dialog2 = popup.create();
+                       dialog2.show();
+
+
+                       Button btnContinuar = (Button) itemView2.findViewById(R.id.btnContinuar);
+                       btnContinuar.setOnClickListener(new View.OnClickListener() {
+                           @Override
+                           public void onClick(View view) {
+                               Toast.makeText(Splash.this, "Términos y Cóndiciones aceptadas!!", Toast.LENGTH_SHORT).show();
+                               dialog2.dismiss();
+
+                           }
+                       });
+                   }else{
+                       //nothing
+                   }
+
+               }
+           });
+
+
+
 
         //Spinner spinner = (Spinner) itemView.findViewById(R.id.spinner_registro);
         //ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,R.array.lista,android.R.layout.simple_list_item_1);
@@ -254,24 +264,27 @@ public class Splash extends AppCompatActivity {
         }
 
 
-        Button btn_continuar = itemView.findViewById(R.id.btn_continuar);
+        Button btn_continuar = itemView.findViewById(R.id.btnRegistrar);
         btn_continuar.setOnClickListener(v -> {
 
             if (TextUtils.isEmpty(edt_nombre.getText().toString())){
                 Toast.makeText(this, "Ingrese su nombre y apellido por favor", Toast.LENGTH_SHORT).show();
                 return;
             }else if (TextUtils.isEmpty(edt_fechadenacimiento.getText().toString())){
-                Toast.makeText(this, "Ingrese su fecha de Nacimiento porfavor", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Ingrese su fecha de Nacimiento por favor", Toast.LENGTH_SHORT).show();
                 return;
+            }else if ((!cbxterminos.isChecked())){
+                    Toast.makeText(this, "Acepte los términos y cóndiciones por favor", Toast.LENGTH_SHORT).show();
+                    return;
             }else{
 
                 Usuario usuario = new Usuario();
                 usuario.setUid(user.getUid());
                 usuario.setNombre(edt_nombre.getText().toString());
                 usuario.setCelular(edt_celular.getText().toString());
-               //usuario.setRating(0.0);
-                // usuario.setSpinner(spinner.getAccessibilityClassName().toString());
                 usuario.setFechadecumpleaños(edt_fechadenacimiento.getText().toString());
+                usuario.setRatingValue(0.0);
+                usuario.setRatingCount((long) 0);
                 usuario.setFechadecreacion(fechacreacion.getText().toString());
                 usuario.setFechaactualizacion(fechaactualizacion.getText().toString());
 

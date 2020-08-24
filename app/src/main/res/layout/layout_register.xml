@@ -46,37 +46,37 @@
 
     <com.rengwuxian.materialedittext.MaterialEditText
         android:id="@+id/edt_nombre"
-        android:hint="Ingrese su Nombres y Apellidos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:singleLine="true"
+        android:hint="Ingrese su Nombres y Apellidos"
+        android:imeActionLabel="Siguiente"
         android:imeOptions="actionNext"
-        android:imeActionLabel= "Siguiente"
         android:inputType="textCapWords"
-        android:textColorHint="@android:color/black"
+        android:singleLine="true"
         android:textColor="@android:color/black"
+        android:textColorHint="@android:color/black"
         android:textSize="20dp"
-        app:met_floatingLabelTextSize="17dp"
-        app:met_baseColor="@android:color/black"
-        app:met_floatingLabel="highlight"
-        app:met_primaryColor="@android:color/black"
-        app:met_singleLineEllipsis="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.937"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.082"/>
-
+        app:layout_constraintVertical_bias="0.063"
+        app:met_baseColor="@android:color/black"
+        app:met_floatingLabel="highlight"
+        app:met_floatingLabelTextSize="17dp"
+        app:met_primaryColor="@android:color/black"
+        app:met_singleLineEllipsis="true" />
 
     <com.rengwuxian.materialedittext.MaterialEditText
         android:id="@+id/edt_phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint=""
         android:imeActionLabel="Siguiente"
         android:imeOptions="actionDone"
         android:inputType="textCapWords"
         android:singleLine="true"
-        android:hint=""
         android:textColor="@android:color/black"
         android:textColorHint="@android:color/black"
         android:textSize="20dp"
@@ -84,7 +84,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edt_nombre"
-        app:layout_constraintVertical_bias="0.058"
+        app:layout_constraintVertical_bias="0.0"
         app:met_baseColor="@android:color/black"
         app:met_floatingLabel="highlight"
         app:met_floatingLabelTextSize="17dp"
@@ -95,7 +95,7 @@
         android:id="@+id/edt_fechadenacimiento"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+
         android:clickable="true"
         android:focusable="false"
         android:hint="Ingrese su Fecha de Cumpleaños"
@@ -112,22 +112,34 @@
         app:met_primaryColor="@android:color/black"
         app:met_singleLineEllipsis="true" />
 
-    <Button
-        android:id="@+id/btn_continuar"
+    <CheckBox
+        android:id="@+id/cbxterminos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="92dp"
+        android:layout_marginBottom="20dp"
+        android:text="Aceptar Términos y Cóndiciones"
+        app:layout_constraintBottom_toTopOf="@+id/btnRegistrar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edt_fechadenacimiento"
+        app:layout_constraintVertical_bias="0.454"></CheckBox>
+
+    <Button
+        android:id="@+id/btnRegistrar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="44dp"
         android:background="@color/negro"
         android:fontFamily="@font/belleza"
-        android:text="Continuar"
+        android:text="Registrar"
         android:textColor="@color/blanco"
         android:textSize="17dp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.906"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edt_fechadenacimiento"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintHorizontal_bias="0.843"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
