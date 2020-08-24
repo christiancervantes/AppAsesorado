@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
@@ -15,8 +16,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.example.appasesorado.Modelos.Asesor;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -26,6 +29,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import butterknife.BindView;
+
 
 public class ProfileFragment extends Fragment {
 
@@ -33,7 +38,11 @@ public class ProfileFragment extends Fragment {
     FirebaseUser user;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
-    TextView nameTv, fechadecumpleaños, celulartv;
+    TextView nameTv, celulartv;
+
+    Asesor asesor;
+
+    RatingBar rating_bar3;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -56,22 +65,32 @@ public class ProfileFragment extends Fragment {
         user = firebaseAuth.getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("estudiantes");
+
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Mi Perfil");
+
         nameTv = view.findViewById(R.id.txtnombre);
-        fechadecumpleaños = view.findViewById(R.id.txtcumple);
+        rating_bar3 = view.findViewById(R.id.rating_bar3);
         celulartv = view.findViewById(R.id.txtcelular);
+
         Query query = databaseReference.orderByChild("uid").equalTo(user.getUid());
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//revisar antes de obtener los datos
+                //revisar antes de obtener los datos
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     //get data
+                    Double ratingValue = Double.valueOf("" +ds.child("ratingValue").getValue());
+                    Long ratingCount = Long.valueOf("" +ds.child("ratingCount").getValue());
+
                     String name = "" + ds.child("nombre").getValue();
-                    String birthday = "Naciste el " + ds.child("fechadecumpleaños").getValue();
                     String celular = "Tu número es " + ds.child("celular").getValue();
+
                     //set data
                     nameTv.setText(name);
-                    fechadecumpleaños.setText(birthday);
+
+                        if (ratingValue!=null)
+                            rating_bar3.setRating(ratingValue.floatValue()/ratingCount);
+
                     celulartv.setText(celular);
 
                 }
@@ -107,7 +126,7 @@ public class ProfileFragment extends Fragment {
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if (user != null) {
             //user is signed in stay here
-//set email of logged in user
+            //set email of logged in user
             //mProfileTV.setText(user.getEmail());
         } else {
             //user is signed in stay here

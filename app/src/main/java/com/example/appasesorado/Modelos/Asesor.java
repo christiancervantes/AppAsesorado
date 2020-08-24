@@ -6,20 +6,20 @@ public class Asesor {
     String curso;
     String skill;
     String celular;
-    String valoracion;
-    String comentario;
+    private Double ratingValue;
+    private Long ratingCount;
+    private String comentario;
     String estado;
 
     public Asesor() {
     }
 
-    public Asesor(String uid, String nombre, String curso, String skill, String celular, String valoracion, String comentario, String estado) {
+    public Asesor(String uid, String nombre, String curso, String skill, String celular, String comentario, String estado) {
         this.uid = uid;
         this.nombre = nombre;
         this.curso = curso;
         this.skill = skill;
         this.celular = celular;
-        this.valoracion = valoracion;
         this.comentario = comentario;
         this.estado = estado;
     }
@@ -48,12 +48,20 @@ public class Asesor {
         this.skill = skill;
     }
 
-    public String getValoracion() {
-        return valoracion;
+    public Double getRatingValue() {
+        return ratingValue;
     }
 
-    public void setValoracion(String valoracion) {
-        this.valoracion = valoracion;
+    public void setRatingValue(Double ratingValue) {
+        this.ratingValue = ratingValue;
+    }
+
+    public Long getRatingCount() {
+        return ratingCount;
+    }
+
+    public void setRatingCount(Long ratingCount) {
+        this.ratingCount = ratingCount;
     }
 
     public String getComentario() {
@@ -87,4 +95,5 @@ public class Asesor {
     public void setUid(String uid) {
         this.uid = uid;
     }
+
 }

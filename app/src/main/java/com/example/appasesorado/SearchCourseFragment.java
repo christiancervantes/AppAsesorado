@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.appasesorado.Adaptadores.AdapterAsesor;
@@ -34,6 +36,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+
 public class SearchCourseFragment extends Fragment {
     FirebaseAuth firebaseAuth;
     RecyclerView recyclerView;
@@ -41,6 +45,8 @@ public class SearchCourseFragment extends Fragment {
     List<Asesor> AsesorList;
     FirebaseDatabase firebaseDatabase;
     SearchView searchView;
+
+
 
     public SearchCourseFragment() {
         // Required empty public constructor
@@ -65,9 +71,12 @@ public class SearchCourseFragment extends Fragment {
         //propiedades del recycler view
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-//iniciar lista de asesores
+
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Búsqueda de Curso");
+
+        //iniciar lista de asesores
         AsesorList = new ArrayList<>();
-//Obtener todos los asesores
+        //Obtener todos los asesores
         getAllAsesors();
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -118,6 +127,9 @@ public class SearchCourseFragment extends Fragment {
         });
     }
 
+
+
+
     private void searchUsers(final String query) {
         final FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("asesores");
@@ -130,8 +142,8 @@ public class SearchCourseFragment extends Fragment {
                     //obtener toda la data
                     if (asesor.getNombre().toLowerCase().contains(query.toLowerCase()) ||
                             asesor.getCurso().toLowerCase().contains(query.toLowerCase()) ||
-                            asesor.getValoracion().toLowerCase().contains(query.toLowerCase()) ||
                             asesor.getSkill().toLowerCase().contains(query.toLowerCase())) {
+
                         AsesorList.add(asesor);
 
                     }
@@ -174,7 +186,7 @@ public class SearchCourseFragment extends Fragment {
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if (user != null) {
             //user is signed in stay here
-//set email of logged in user
+            //set email of logged in user
             //mProfileTV.setText(user.getEmail());
         } else {
             //user is signed in stay here

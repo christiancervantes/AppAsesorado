@@ -3,12 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/blanco"
     android:layout_height="match_parent"
     tools:context=".ProfileFragment">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="wrap_content"
+        android:background="@color/blanco"
+        android:id="@+id/card1"
         android:layout_centerHorizontal="true"
         android:layout_margin="10dp"
         app:cardElevation="10dp">
@@ -16,7 +19,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:backgroundTint="#BAC5BFBF"
+            android:backgroundTint="@color/blanco"
             android:background="@drawable/corner"
             >
 
@@ -29,16 +32,8 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="20dp"
                 app:civ_border_color="@color/negro"
-                android:src="@drawable/man" />
-
-            <RelativeLayout
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/imgavatar"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
-                android:backgroundTint="#EDEDEBEB"
-                android:background="@drawable/corner">
+                android:src="@drawable/man"
+                tools:ignore="MissingClass" />
 
                 <TextView
                     android:id="@+id/txtnombre"
@@ -46,46 +41,100 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="20dp"
+                    android:layout_below="@+id/imgavatar"
+                    android:layout_marginTop="10dp"
                     android:fontFamily="@font/brandon_medium"
-                    android:text="TextView"
+                    android:text="Nombres y apellidos"
+                    android:layout_marginBottom="25dp"
                     android:textColor="@color/negro"
                     android:textSize="20sp"
                     android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/txtcelular"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/txtnombre"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="20dp"
-                    android:fontFamily="@font/brandon_medium"
-                    android:text="TextView"
-                    android:textColor="@color/negro"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/txtcumple"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/txtcelular"
-                    android:layout_centerHorizontal="true"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="20dp"
-                    android:fontFamily="@font/brandon_medium"
-                    android:text="TextView"
-                    android:textColor="@color/negro"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-            </RelativeLayout>
 
 
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
+
+
+
+        <RelativeLayout
+            android:id="@+id/card2"
+            android:layout_below="@+id/card1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/blanco"
+            android:background="@drawable/corner"
+            >
+
+            <TextView
+                android:id="@+id/txtvaloracion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/brandon_medium"
+                android:text="Confiabilidad:"
+                android:textColor="@color/negro"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <RatingBar
+                android:id="@+id/rating_bar3"
+                style="?android:attr/ratingBarStyleIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/blanco"
+                android:backgroundTint="@color/blanco"
+                android:isIndicator="true"
+                android:numStars="5"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/txtvaloracion"
+                android:max="5"
+                android:progressBackgroundTint="@color/primaryColor"
+                android:progressTint="@color/primaryColor"
+                android:secondaryProgressTint="@color/primaryColor"
+                android:stepSize="0.5"></RatingBar>
+        </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/linea1"
+        android:layout_width="match_parent"
+        android:background="@color/plomoclaro"
+        android:layout_below="@id/card2"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginEnd="60dp"
+        android:layout_height="2dp"
+        android:padding="8dp"
+        android:orientation="horizontal" />
+
+        <RelativeLayout
+            android:id="@+id/card3"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/linea1"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/blanco"
+            android:background="@drawable/corner"
+            >
+
+            <TextView
+                android:id="@+id/txtcelular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:fontFamily="@font/brandon_medium"
+                android:text="TextView"
+                android:textColor="@color/negro"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+
+        </RelativeLayout>
+
 
 
 </RelativeLayout>

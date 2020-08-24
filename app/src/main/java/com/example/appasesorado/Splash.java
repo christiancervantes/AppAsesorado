@@ -269,7 +269,7 @@ public class Splash extends AppCompatActivity {
                 usuario.setUid(user.getUid());
                 usuario.setNombre(edt_nombre.getText().toString());
                 usuario.setCelular(edt_celular.getText().toString());
-                usuario.setRating(0.0);
+               //usuario.setRating(0.0);
                 // usuario.setSpinner(spinner.getAccessibilityClassName().toString());
                 usuario.setFechadecumpleaños(edt_fechadenacimiento.getText().toString());
                 usuario.setFechadecreacion(fechacreacion.getText().toString());
