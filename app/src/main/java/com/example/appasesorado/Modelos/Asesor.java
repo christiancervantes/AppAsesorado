@@ -1,13 +1,14 @@
 package com.example.appasesorado.Modelos;
 
 public class Asesor {
-    String uid;
-    String nombre;
-    String curso;
-    String skill;
-    String celular;
+    private String uid;
+    private String nombre;
+    private String curso;
+    private String skill;
+    private String celular;
     private Double ratingValue;
     private Long ratingCount;
+    private Long valoracion1;
     private String comentario;
     String estado;
     String fechadecumpleaños, fechadecreacion, fechaactualizacion;
@@ -16,18 +17,27 @@ public class Asesor {
     public Asesor() {
     }
 
-    public Asesor(String uid, String nombre, String curso, String skill, String celular, String comentario, String estado,String fechadecumpleaños,String fechaactualizacion, String fechadecreacion,boolean verificacion) {
+    public Asesor(String uid, String nombre, String curso, String skill, String celular, String comentario, String estado,String fechadecumpleaños,String fechaactualizacion, String fechadecreacion,boolean verificacion,Long valoracion1) {
         this.uid = uid;
         this.nombre = nombre;
         this.curso = curso;
         this.skill = skill;
         this.celular = celular;
+        this.valoracion1 = valoracion1;
         this.comentario = comentario;
         this.estado = estado;
         this.fechadecumpleaños = fechadecumpleaños;
         this.fechadecreacion = fechadecreacion;
         this.fechaactualizacion = fechaactualizacion;
         this.verificacion = verificacion;
+    }
+
+    public Long getValoracion1() {
+        return valoracion1;
+    }
+
+    public void setValoracion1(Long valoracion1) {
+        this.valoracion1 = valoracion1;
     }
 
     public String getNombre() {
