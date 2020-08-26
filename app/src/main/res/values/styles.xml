@@ -47,4 +47,11 @@
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="colorAccent">@color/primaryLightColor</item>
     </style>
+
+    <style name="foodRatingBar" parent="android:Widget.RatingBar">
+
+        <item name="android:minHeight">25dp</item>
+        <item name="android:maxHeight">25dp</item>
+    </style>
+
 </resources>

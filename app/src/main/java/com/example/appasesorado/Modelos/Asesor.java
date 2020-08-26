@@ -1,11 +1,11 @@
 package com.example.appasesorado.Modelos;
 
 public class Asesor {
-    String uid;
-    String nombre;
-    String curso;
-    String skill;
-    String celular;
+    private String uid;
+    private String nombre;
+    private String curso;
+    private String skill;
+    private String celular;
     private Double ratingValue;
     private Long ratingCount;
     private Long valoracion1;
