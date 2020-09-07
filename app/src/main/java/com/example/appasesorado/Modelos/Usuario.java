@@ -6,11 +6,12 @@ class Usuario {
     private String fechadecumpleaños,fechadecreacion,fechaactualizacion;
     private Double ratingValue;
     private Long ratingCount;
+    private String estado;
 
     public Usuario() {
     }
 
-    public Usuario(String uid, String nombre, String celular, String spinner, String fechadecumpleaños, String fechadecreacion, String fechaactualizacion) {
+    public Usuario(String uid, String nombre, String celular, String spinner, String fechadecumpleaños, String fechadecreacion, String fechaactualizacion,String estado) {
         this.uid = uid;
         this.nombre = nombre;
         this.celular = celular;
@@ -18,9 +19,17 @@ class Usuario {
         this.fechadecumpleaños = fechadecumpleaños;
         this.fechadecreacion = fechadecreacion;
         this.fechaactualizacion = fechaactualizacion;
+        this.estado = estado;
 
     }
 
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
 
     public String getUid() {
         return uid;

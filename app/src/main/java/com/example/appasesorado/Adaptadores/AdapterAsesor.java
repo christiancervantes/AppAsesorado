@@ -58,8 +58,6 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
     Context context;
     List<Asesor> AsesorList;
 
-    int position1;
-
     FirebaseDatabase database;
     DatabaseReference commentRef;
 
@@ -79,7 +77,6 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
 
     }
 
-
     @Override
     public void onBindViewHolder(@NonNull AdapterAsesor.MyHolder myHolder, int position) {
 
@@ -88,11 +85,6 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
         String skill = AsesorList.get(position).getSkill();
         String celular = AsesorList.get(position).getCelular();
         String comentario = AsesorList.get(position).getComentario();
-        Double ratingValue = AsesorList.get(position).getRatingValue();
-        Long ratingCount = AsesorList.get(position).getRatingCount();
-
-
-        //String valoracion1 = String.valueOf(AsesorList.get(position).getRatingValue()/AsesorList.get(position).getRatingCount());
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         assert user != null;
@@ -100,12 +92,12 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
         myHolder.namease.setText(nombre);
         myHolder.skillase.setText(skill);
 
-        //myHolder.valoracion1.setText(valoracion1);
-
+        //setear el rating
         if (AsesorList.get(position).getRatingValue() != null)
-        myHolder.rating_bar2.setRating(AsesorList.get(position).getRatingValue().floatValue() / AsesorList.get(position).getRatingCount());
+            myHolder.rating_bar2.setRating(AsesorList.get(position).getRatingValue().floatValue() / AsesorList.get(position).getRatingCount());
 
         myHolder.comentase.setText(comentario);
+        Comun.asesorseleccionado = AsesorList.get(position);
 
         myHolder.mostrarcomentarios.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,11 +133,16 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
                     hashMap.put("estado", "en asesoria");
                     dbref.updateChildren(hashMap);
 
+                    //actualizar dato del estudiante
+                    DatabaseReference estRef= FirebaseDatabase.getInstance().getReference("estudiantes").child(Comun.actualUsuario.getUid());
+                    HashMap<String, Object> hashMap2 = new HashMap<>();
+                    hashMap2.put("estado","en asesoria");
+                    estRef.updateChildren(hashMap2);
+
                     //Intent para abrir whatsapp
                     Intent intentWS = new Intent(Intent.ACTION_VIEW);
                     intentWS.setData(Uri.parse("http://api.whatsapp.com/send?phone=" + "+51" + celular + "&text=" + ""));
                     context.startActivity(intentWS);
-
 
 
                 }).addOnFailureListener(e -> {
@@ -166,20 +163,30 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     String estate = "" + ds.child("estado").getValue();
-                    if (AsesorList.get(position).getEstado().equals("en asesoria") && AsesorList.get(position).getEstado().equals(estate)) {
+                    Comun.asesorseleccionado = AsesorList.get(position);
+                    if (Comun.asesorseleccionado.getEstado().equals("en asesoria"))
+                    {
+                        //   if ( Comun.actualUsuario.getEstado().equals("en asesoria")){
                         myHolder.completarasesoria.setVisibility(View.VISIBLE);
                         myHolder.cancelarasesoria.setVisibility(View.VISIBLE);
                         myHolder.celulartv.setVisibility(View.GONE);
+                        System.out.println(" verdadero "+Comun.asesorseleccionado.getEstado());
+                        System.out.println(" uid "+Comun.actualUsuario.getUid());
 
-
-
-                    } else {
+                    }
+                  else
+                    {
+                        System.out.println(" Falso "+Comun.asesorseleccionado.getEstado());
+                        System.out.println(" uid "+Comun.actualUsuario.getUid());
                         myHolder.completarasesoria.setVisibility(View.GONE);
                         myHolder.cancelarasesoria.setVisibility(View.GONE);
                         myHolder.celulartv.setVisibility(View.VISIBLE);
-                    }
-                }
 
+                    }
+
+                    System.out.println(" fin todo "+Comun.asesorseleccionado.getEstado());
+                    System.out.println(" uid "+Comun.actualUsuario.getUid());
+                }
             }
 
             @Override
@@ -187,6 +194,7 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
 
             }
         });
+
 
         //Accion de completar asesoria
         myHolder.completarasesoria.setOnClickListener(new View.OnClickListener() {
@@ -197,6 +205,12 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
                 HashMap<String, Object> hashMap = new HashMap<>();
                 hashMap.put("estado", "finish asesoria");
                 dbref.updateChildren(hashMap);
+
+                //actualizar dato del estudiante
+                DatabaseReference estRef2= FirebaseDatabase.getInstance().getReference("estudiantes").child(Comun.actualUsuario.getUid());
+                HashMap<String, Object> hashMap2 = new HashMap<>();
+                hashMap2.put("estado","finish asesoria");
+                estRef2.updateChildren(hashMap2);
 
 
                 //carga vista emergente para la valoracion
@@ -266,11 +280,18 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
             public void onClick(View view) {
                 DatabaseReference dbref = FirebaseDatabase.getInstance().getReference("asesores").child(aseuid);
                 HashMap<String, Object> hashMap = new HashMap<>();
-                hashMap.put("estado", "no asesoria");
+                hashMap.put("estado", "neutro");
                 dbref.updateChildren(hashMap);
 
                 //falta agregar lo de remover de la base de datos al cancelar(yo lo pongo owo)
                 //falta lo de y lo de la valoracion agregar comentarios, sus vistas ya las cree estan arriba
+
+                //actualizar dato del estudiante
+                DatabaseReference estRef3= FirebaseDatabase.getInstance().getReference("estudiantes").child(Comun.actualUsuario.getUid());
+                HashMap<String, Object> hashMap2 = new HashMap<>();
+                hashMap2.put("estado","neutro");
+                estRef3.updateChildren(hashMap2);
+
 
             }
         });
@@ -281,13 +302,13 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
     private void addRatingToFood(float ratingValue) {
         FirebaseDatabase.getInstance()
                 .getReference(Comun.ASESOR_REF)
-                .child((AsesorList.get(position1).getUid())) //selecciona asesor
+                .child(Comun.asesorseleccionado.getUid()) //selecciona asesor
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()){
                             Asesor asesor = dataSnapshot.getValue(Asesor.class);
-                            asesor.setUid((AsesorList.get(position1).getUid()));
+                            asesor.setUid(Comun.asesorseleccionado.getUid());
 
                             //aplicar rating
                             if (asesor.getRatingValue()==null)
