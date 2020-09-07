@@ -145,7 +145,7 @@ public class Splash extends AppCompatActivity {
 
 
     //commit
-    
+
     private void checkUserFromFirebase(FirebaseUser user) {
         studentInfoRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
