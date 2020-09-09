@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <activity android:name=".AsesorActivity"></activity>
         <activity
             android:name=".Splash"
             android:theme="@style/SplashTheme">
@@ -36,9 +36,6 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_application_id" />
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDi4o__cPaGRt7lXzhZALl9qEntlAmUy68" />
 
         <activity
             android:name="com.facebook.FacebookActivity"
