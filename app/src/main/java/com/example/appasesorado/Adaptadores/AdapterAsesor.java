@@ -45,7 +45,10 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,13 +61,15 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
     Context context;
     List<Asesor> AsesorList;
 
-    int position1;
-
     FirebaseDatabase database;
     DatabaseReference commentRef;
 
     @BindView(R.id.rating_bar2)
     RatingBar rating_bar2;
+
+    public String idregistroasesoria;
+
+
 
     public AdapterAsesor(Context context, List<Asesor> asesorList) {
         this.context = context;
@@ -79,7 +84,6 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
 
     }
 
-
     @Override
     public void onBindViewHolder(@NonNull AdapterAsesor.MyHolder myHolder, int position) {
 
@@ -88,11 +92,8 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
         String skill = AsesorList.get(position).getSkill();
         String celular = AsesorList.get(position).getCelular();
         String comentario = AsesorList.get(position).getComentario();
-        Double ratingValue = AsesorList.get(position).getRatingValue();
-        Long ratingCount = AsesorList.get(position).getRatingCount();
-
-
-        //String valoracion1 = String.valueOf(AsesorList.get(position).getRatingValue()/AsesorList.get(position).getRatingCount());
+        String idasesor = AsesorList.get(position).getUid();   // abr-07-09-2020
+        System.out.println("   idasesor   ///  "+idasesor);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         assert user != null;
@@ -100,12 +101,15 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
         myHolder.namease.setText(nombre);
         myHolder.skillase.setText(skill);
 
-        //myHolder.valoracion1.setText(valoracion1);
+        // abr - 07-09-2020
+        myHolder.textView2_idasesor.setText(idasesor);
 
+        //setear el rating
         if (AsesorList.get(position).getRatingValue() != null)
-        myHolder.rating_bar2.setRating(AsesorList.get(position).getRatingValue().floatValue() / AsesorList.get(position).getRatingCount());
+            myHolder.rating_bar2.setRating(AsesorList.get(position).getRatingValue().floatValue() / AsesorList.get(position).getRatingCount());
 
         myHolder.comentase.setText(comentario);
+        Comun.asesorseleccionado = AsesorList.get(position);
 
         myHolder.mostrarcomentarios.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,17 +126,39 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
             }
         });
 
-        myHolder.celulartv.setOnClickListener(view -> {
+
+        myHolder.celulartv.setOnClickListener(view ->
+        {
+            Comun.asesorseleccionado = AsesorList.get(position);
+            System.out.println("  para ver si pasa qqui 0B0B0B0B0  ");
+
             String timeStamp = String.valueOf(System.currentTimeMillis());
 
+            Date dateAse = new Date();
+            DateFormat hourdateFormataa = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+
             boolean installed = appInstalledOrNot("com.whatsapp");
-            if (installed) {
+            if (installed)
+            {
                 //Guardar la asesoria dentro de la base de datos
                 HashMap<String, Object> asesoria = new HashMap<>();
                 asesoria.put("asesor", "" + aseuid);
+                asesoria.put("nombreAsesor",""+Comun.asesorseleccionado.getNombre());
                 asesoria.put("estudiante", "" + uid);
+                asesoria.put("nombreEstudiante",""+Comun.actualUsuario.getNombre());
                 asesoria.put("timeStamp", "" + timeStamp);
                 asesoria.put("estado", "" + "en asesoria");
+                asesoria.put("fechahoraregis", hourdateFormataa.format(dateAse));
+                asesoria.put("fechahorafin", "");
+                asesoria.put("fechahoraCancelar","");
+                asesoria.put("fechahoraRatingCommnet","");
+                asesoria.put("rating","");
+                asesoria.put("comment","");
+                asesoria.put("pagada", 0);
+                //asesoria.put("fechahasesoria", "");
+                asesoria.put("estadoxyz", 0);
+
                 DatabaseReference referenceaseasoria = FirebaseDatabase.getInstance().getReference("asesorias");
                 referenceaseasoria.child(timeStamp).setValue(asesoria).addOnSuccessListener(aVoid -> {
                     //actualizar estado del asesor
@@ -141,18 +167,22 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
                     hashMap.put("estado", "en asesoria");
                     dbref.updateChildren(hashMap);
 
+                    //actualizar dato del estudiante
+                    DatabaseReference estRef= FirebaseDatabase.getInstance().getReference("estudiantes").child(Comun.actualUsuario.getUid());
+                    HashMap<String, Object> hashMap2 = new HashMap<>();
+                    hashMap2.put("estado","en asesoria");
+                    estRef.updateChildren(hashMap2);
+
                     //Intent para abrir whatsapp
                     Intent intentWS = new Intent(Intent.ACTION_VIEW);
                     intentWS.setData(Uri.parse("http://api.whatsapp.com/send?phone=" + "+51" + celular + "&text=" + ""));
                     context.startActivity(intentWS);
-
-
-
-                }).addOnFailureListener(e -> {
+                }).addOnFailureListener(e ->{
                     Toast.makeText(context, "No se ha podido contactar al asesor", Toast.LENGTH_SHORT).show();
                 });
-
-            } else {
+            }
+            else
+            {
                 Toast.makeText(context, "WhatsApp no esta instalado en su dipositivo.", Toast.LENGTH_SHORT).show();
             }
 
@@ -161,25 +191,65 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
 
         //Cargar las asesorias registradas por el usuario
         Query query = FirebaseDatabase.getInstance().getReference("asesorias").orderByChild("estudiante").equalTo(uid);
-        query.addValueEventListener(new ValueEventListener() {
+        query.addValueEventListener(new ValueEventListener()
+        {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    String estate = "" + ds.child("estado").getValue();
-                    if (AsesorList.get(position).getEstado().equals("en asesoria") && AsesorList.get(position).getEstado().equals(estate)) {
+            public void onDataChange(@NonNull DataSnapshot snapshot)
+            {
+
+                for (DataSnapshot ds : snapshot.getChildren())
+                {
+
+                    int estadoxyzA = ds.child("estadoxyz").getValue(Integer.class);
+                    String asesorA = ds.child("asesor").getValue(String.class);
+                    System.out.println(uid+" ,, uid C6C6C6C6C  ds.getKey()   //,,  "+ds.getKey()+ "    ---  ds.getChildrenCount() -- "+ds.getChildrenCount()+" asesorA // "+asesorA);
+                    Comun.asesorseleccionado = AsesorList.get(position);
+
+                    //if (Comun.asesorseleccionado.getEstado().equals("en asesoria"))
+                    //if (estadoxyzA == 0 && Comun.asesorseleccionado.getEstado().equals("en asesoria"))
+                    if (estadoxyzA == 0 && myHolder.textView2_idasesor.getText().toString().compareTo(asesorA) == 0)
+                    {
+                        //   if ( Comun.actualUsuario.getEstado().equals("en asesoria")){
                         myHolder.completarasesoria.setVisibility(View.VISIBLE);
                         myHolder.cancelarasesoria.setVisibility(View.VISIBLE);
                         myHolder.celulartv.setVisibility(View.GONE);
+                        System.out.println(" verdadero "+Comun.asesorseleccionado.getEstado());
+                        System.out.println(" uid "+Comun.actualUsuario.getUid());
 
+                        idregistroasesoria = ds.getKey();
+                        System.out.println(" VERDADERO  myHolder.textView2_idasesor // "+myHolder.textView2_idasesor.getText()+" asesorA-- "+asesorA+"  **** "+myHolder.textView2_idasesor.getText().toString().compareTo(asesorA));
 
+                    }
 
-                    } else {
+                    //else
+                    //if (estadoxyzA == 1 && Comun.asesorseleccionado.getEstado().equals("finish asesoria"))
+                    if (estadoxyzA == 1 && myHolder.textView2_idasesor.getText().toString().compareTo(asesorA) == 0)
+                    {
+                        System.out.println(" Falso "+Comun.asesorseleccionado.getEstado());
+                        System.out.println(" uid "+Comun.actualUsuario.getUid());
                         myHolder.completarasesoria.setVisibility(View.GONE);
                         myHolder.cancelarasesoria.setVisibility(View.GONE);
                         myHolder.celulartv.setVisibility(View.VISIBLE);
-                    }
-                }
+                        idregistroasesoria = ds.getKey();
+                        System.out.println(" FALSOX9X9 myHolder.textView2_idasesor // "+myHolder.textView2_idasesor.getText()+" asesorA ** "+asesorA+"  **** "+myHolder.textView2_idasesor.getText().toString().compareTo(asesorA));
 
+                    }
+
+                    if (estadoxyzA == -1 && myHolder.textView2_idasesor.getText().toString().compareTo(asesorA) == 0)
+                    {
+                        System.out.println(" Falso "+Comun.asesorseleccionado.getEstado());
+                        System.out.println(" uid "+Comun.actualUsuario.getUid());
+                        myHolder.completarasesoria.setVisibility(View.GONE);
+                        myHolder.cancelarasesoria.setVisibility(View.GONE);
+                        myHolder.celulartv.setVisibility(View.VISIBLE);
+                        idregistroasesoria = ds.getKey();
+                        System.out.println(" FALSOX9X9 myHolder.textView2_idasesor // "+myHolder.textView2_idasesor.getText()+" asesorA ** "+asesorA+"  **** "+myHolder.textView2_idasesor.getText().toString().compareTo(asesorA));
+
+                    }
+
+                    System.out.println(" fin todos "+Comun.asesorseleccionado.getEstado());
+                    System.out.println(" uid "+Comun.actualUsuario.getUid());
+                }
             }
 
             @Override
@@ -188,16 +258,39 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
             }
         });
 
+
+
         //Accion de completar asesoria
         myHolder.completarasesoria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Date dateAse = new Date();
+                DateFormat hourdateFormataa = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+                /**
                 //actulizar estado de la asesoria
                 DatabaseReference dbref = FirebaseDatabase.getInstance().getReference("asesores").child(aseuid);
                 HashMap<String, Object> hashMap = new HashMap<>();
                 hashMap.put("estado", "finish asesoria");
                 dbref.updateChildren(hashMap);
 
+                //actualizar dato del estudiante
+                DatabaseReference estRef2= FirebaseDatabase.getInstance().getReference("estudiantes").child(Comun.actualUsuario.getUid());
+                HashMap<String, Object> hashMap2 = new HashMap<>();
+                hashMap2.put("estado","finish asesoria");
+                estRef2.updateChildren(hashMap2);
+                **/
+
+                //-*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*-
+                // actualizar la asesoría (abr -- 07-09-2020)
+                System.out.println(" idregistroasesoria..   "+idregistroasesoria);
+                DatabaseReference dbrefx = FirebaseDatabase.getInstance().getReference("asesorias").child(idregistroasesoria);
+                HashMap<String, Object> hashMap3 = new HashMap<>();
+                hashMap3.put("fechahorafin", hourdateFormataa.format(dateAse));  // abr-07-09-2020
+                hashMap3.put("estadoxyz", 1);    // abr-07-09-2020
+                hashMap3.put("estado", "finish asesoria");    // abr-07-09-2020
+                dbrefx.updateChildren(hashMap3);
+                //-*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*-
 
                 //carga vista emergente para la valoracion
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -225,9 +318,11 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
                 btn_continuar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+
+                        Comun.asesorseleccionado = AsesorList.get(position);
+
                         database = FirebaseDatabase.getInstance();
                         commentRef = database.getReference(Comun.COMMENT_REF);
-
 
                         CommentModel commentModel = new CommentModel();
                         commentModel.setName(Comun.actualUsuario.getNombre());
@@ -238,7 +333,16 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
                         commentModel.setCommentTimeStamp(serverTimeStamp);
                         //foodDetailViewModel.setCommentModel(commentModel);
 
-
+                        //-*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*-
+                        // actualizar la asesoría (abr -- 07-09-2020)
+                        System.out.println(" idregistroasesoria..   "+idregistroasesoria);
+                        DatabaseReference dbrefx = FirebaseDatabase.getInstance().getReference("asesorias").child(idregistroasesoria);
+                        HashMap<String, Object> hashMap3 = new HashMap<>();
+                        hashMap3.put("fechahoraRatingComment", hourdateFormataa.format(dateAse));  // abr-07-09-2020
+                        hashMap3.put("comment", ""+commentModel.getComment());    // abr-07-09-2020
+                        hashMap3.put("rating", ""+commentModel.getRatingValue());// abr-07-09-2020
+                        dbrefx.updateChildren(hashMap3);
+                        //-*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*-
 
                         FirebaseDatabase.getInstance()
                                 .getReference(Comun.COMMENT_REF)
@@ -255,7 +359,6 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
                                         }
                                     }
                                 });
-
                     }
                 });
 
@@ -264,14 +367,36 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
         myHolder.cancelarasesoria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                Date dateAse = new Date();
+                DateFormat hourdateFormataa = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+                /**
                 DatabaseReference dbref = FirebaseDatabase.getInstance().getReference("asesores").child(aseuid);
                 HashMap<String, Object> hashMap = new HashMap<>();
-                hashMap.put("estado", "no asesoria");
+                hashMap.put("estado", "neutro");
                 dbref.updateChildren(hashMap);
 
                 //falta agregar lo de remover de la base de datos al cancelar(yo lo pongo owo)
                 //falta lo de y lo de la valoracion agregar comentarios, sus vistas ya las cree estan arriba
 
+                //actualizar dato del estudiante
+                DatabaseReference estRef3= FirebaseDatabase.getInstance().getReference("estudiantes").child(Comun.actualUsuario.getUid());
+                HashMap<String, Object> hashMap2 = new HashMap<>();
+                hashMap2.put("estado","neutro");
+                estRef3.updateChildren(hashMap2);
+                 **/
+
+                //-*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*-
+                // actualizar la asesoría (abr -- 07-09-2020)
+                System.out.println(" idregistroasesoria..   "+idregistroasesoria);
+                DatabaseReference dbrefx = FirebaseDatabase.getInstance().getReference("asesorias").child(idregistroasesoria);
+                HashMap<String, Object> hashMap4 = new HashMap<>();
+                hashMap4.put("fechahoraCancelar", hourdateFormataa.format(dateAse));  // abr-07-09-2020
+                hashMap4.put("estadoxyz", -1);    // abr-07-09-20201
+                hashMap4.put("estado", "cancelo asesoria");    // abr-07-09-2020
+                dbrefx.updateChildren(hashMap4);
+                //-*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*-
             }
         });
     }
@@ -281,13 +406,13 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
     private void addRatingToFood(float ratingValue) {
         FirebaseDatabase.getInstance()
                 .getReference(Comun.ASESOR_REF)
-                .child((AsesorList.get(position1).getUid())) //selecciona asesor
+                .child(Comun.asesorseleccionado.getUid()) //selecciona asesor
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()){
                             Asesor asesor = dataSnapshot.getValue(Asesor.class);
-                            asesor.setUid((AsesorList.get(position1).getUid()));
+                            asesor.setUid(Comun.asesorseleccionado.getUid());
 
                             //aplicar rating
                             if (asesor.getRatingValue()==null)
@@ -357,8 +482,6 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
         return AsesorList.size();
     }
 
-
-
     public static class MyHolder extends RecyclerView.ViewHolder {
         TextView namease, skillase, comentase;
         RatingBar rating_bar2 ;
@@ -367,6 +490,10 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
         Button completarasesoria;
         Button cancelarasesoria;
         LinearLayout mostrarcomentarios;
+
+        // abr -- 07-09-2020
+        TextView textView2_idasesor;
+
 
 
 
@@ -381,6 +508,9 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
             completarasesoria = itemView.findViewById(R.id.finishasedsoria);
             cancelarasesoria = itemView.findViewById(R.id.cancelarasesoria);
             mostrarcomentarios = itemView.findViewById(R.id.mostrarcomentarios);
+
+            // abr--07-09-2020
+            textView2_idasesor = itemView.findViewById(R.id.textView2_idasesor);
         }
 
     }

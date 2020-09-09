@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,12 +25,16 @@ public class MainActivity extends AppCompatActivity {
         //init
         firebaseAuth = FirebaseAuth.getInstance();
 //BottomNavigation
+
+
         BottomNavigationView navigationView = findViewById(R.id.btn_nav);
         navigationView.setOnNavigationItemSelectedListener(selectedListener);
         SearchCourseFragment fragment1 = new SearchCourseFragment();
         FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
         ft1.replace(R.id.content, fragment1, "");
         ft1.commit();
+
+
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener selectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -62,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if (user != null) {
             //user is signed in stay here
-    //set email of logged in user
+            //set email of logged in user
             //mProfileTV.setText(user.getEmail());
         } else {
             //user is signed in stay here
