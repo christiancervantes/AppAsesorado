@@ -32,6 +32,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginStart="36dp"
         android:layout_marginTop="20dp"
+        app:iconifiedByDefault="false"
         android:layout_marginEnd="36dp"
         android:background="@drawable/searchch_line"
         android:fontFamily="@font/brandon_medium"

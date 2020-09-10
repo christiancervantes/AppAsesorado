@@ -22,6 +22,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.appasesorado.Adaptadores.AdapterAsesor;
 import com.example.appasesorado.Modelos.Asesor;
@@ -71,12 +72,9 @@ public class SearchCourseFragment extends Fragment {
         //propiedades del recycler view
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Búsqueda de Curso");
-
-        //iniciar lista de asesores
+//iniciar lista de asesores
         AsesorList = new ArrayList<>();
-        //Obtener todos los asesores
+//Obtener todos los asesores
         getAllAsesors();
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -113,10 +111,15 @@ public class SearchCourseFragment extends Fragment {
                 AsesorList.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Asesor asesor = ds.getValue(Asesor.class);
-                    AsesorList.add(asesor);
-                    adapterAsesor = new AdapterAsesor(getActivity(), AsesorList);
-                    recyclerView.setAdapter(adapterAsesor);
+                    assert asesor != null;
+                    if (asesor.isVerificacion()) {
+                        if(asesor.isCondicion()){
+                            AsesorList.add(asesor);
+                            adapterAsesor = new AdapterAsesor(getActivity(), AsesorList);
+                            recyclerView.setAdapter(adapterAsesor);
+                        }
 
+                    }
                 }
             }
 
@@ -140,14 +143,20 @@ public class SearchCourseFragment extends Fragment {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Asesor asesor = ds.getValue(Asesor.class);
                     //obtener toda la data
-                    if (asesor.getNombre().toLowerCase().contains(query.toLowerCase()) ||
-                            asesor.getCurso().toLowerCase().contains(query.toLowerCase()) ||
-                            asesor.getValoracion1().toString().contains(query.toLowerCase()) ||
-                            asesor.getSkill().toLowerCase().contains(query.toLowerCase())) {
+                    assert asesor != null;
+                    if (asesor.isVerificacion()) {
+                        if(asesor.isCondicion()){
+                            if (asesor.getNombre().toLowerCase().contains(query.toLowerCase()) ||
+                                    asesor.getCurso().toLowerCase().contains(query.toLowerCase()) ||
+                                    asesor.getValoracion1().toString().contains(query.toLowerCase()) ||
+                                    asesor.getSkill().toLowerCase().contains(query.toLowerCase())) {
 
-                        AsesorList.add(asesor);
+                                AsesorList.add(asesor);
 
+                            }
+                        }
                     }
+
 
                     //Adapter
                     adapterAsesor = new AdapterAsesor(getActivity(), AsesorList);

@@ -11,11 +11,14 @@ public class Asesor {
     private Long valoracion1;
     private String comentario;
     String estado;
+    String fechadecumpleaños, fechadecreacion, fechaactualizacion;
+    boolean verificacion;
+    boolean condicion;
 
     public Asesor() {
     }
 
-    public Asesor(String uid, String nombre, String curso, String skill, String celular, Long valoracion1, String comentario, String estado) {
+    public Asesor(String uid, String nombre, String curso, String skill, String celular, String comentario, String estado, String fechadecumpleaños, String fechaactualizacion, String fechadecreacion, boolean verificacion, Long valoracion1, boolean condicion ) {
         this.uid = uid;
         this.nombre = nombre;
         this.curso = curso;
@@ -24,6 +27,11 @@ public class Asesor {
         this.valoracion1 = valoracion1;
         this.comentario = comentario;
         this.estado = estado;
+        this.fechadecumpleaños = fechadecumpleaños;
+        this.fechadecreacion = fechadecreacion;
+        this.fechaactualizacion = fechaactualizacion;
+        this.verificacion = verificacion;
+        this.condicion=condicion;
     }
 
     public Long getValoracion1() {
@@ -106,4 +114,44 @@ public class Asesor {
         this.uid = uid;
     }
 
+
+    public String getFechadecumpleaños() {
+        return fechadecumpleaños;
+    }
+
+    public void setFechadecumpleaños(String fechadecumpleaños) {
+        this.fechadecumpleaños = fechadecumpleaños;
+    }
+
+    public String getFechadecreacion() {
+        return fechadecreacion;
+    }
+
+    public void setFechadecreacion(String fechadecreacion) {
+        this.fechadecreacion = fechadecreacion;
+    }
+
+    public String getFechaactualizacion() {
+        return fechaactualizacion;
+    }
+
+    public void setFechaactualizacion(String fechaactualizacion) {
+        this.fechaactualizacion = fechaactualizacion;
+    }
+
+    public boolean isVerificacion() {
+        return verificacion;
+    }
+
+    public void setVerificacion(boolean verificacion) {
+        this.verificacion = verificacion;
+    }
+
+    public boolean isCondicion() {
+        return condicion;
+    }
+
+    public void setCondicion(boolean condicion) {
+        this.condicion = condicion;
+    }
 }

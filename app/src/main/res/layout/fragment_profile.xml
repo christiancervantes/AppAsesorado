@@ -93,7 +93,9 @@
                 android:progressBackgroundTint="@color/primaryColor"
                 android:progressTint="@color/primaryColor"
                 android:secondaryProgressTint="@color/primaryColor"
-                android:stepSize="0.5"></RatingBar>
+                android:stepSize="0.5">
+
+            </RatingBar>
         </RelativeLayout>
 
     <LinearLayout
