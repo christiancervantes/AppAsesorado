@@ -26,7 +26,7 @@
             android:id="@+id/txt_comment_name"
             android:text="Nombre"
             android:textColor="@color/negro"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:fontFamily="@font/brandon_medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"></TextView>
@@ -35,7 +35,7 @@
             android:id="@+id/txt_comment_date"
             android:textColor="@color/negro"
             android:text="Date"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:fontFamily="@font/brandon_medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"></TextView>
@@ -52,7 +52,7 @@
             android:fontFamily="@font/brandon_medium"
             android:textColor="@color/negro"
             android:textStyle="italic"
-            android:textSize="22sp"
+            android:textSize="18sp"
             android:text="Comentario"
             android:id="@+id/txt_comment"
             android:layout_width="match_parent"
