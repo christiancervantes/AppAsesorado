@@ -13,11 +13,12 @@ public class Asesor {
     String estado;
     String fechadecumpleaños, fechadecreacion, fechaactualizacion;
     boolean verificacion;
+    boolean condicion;
 
     public Asesor() {
     }
 
-    public Asesor(String uid, String nombre, String curso, String skill, String celular, String comentario, String estado,String fechadecumpleaños,String fechaactualizacion, String fechadecreacion,boolean verificacion,Long valoracion1) {
+    public Asesor(String uid, String nombre, String curso, String skill, String celular, String comentario, String estado, String fechadecumpleaños, String fechaactualizacion, String fechadecreacion, boolean verificacion, Long valoracion1, boolean condicion ) {
         this.uid = uid;
         this.nombre = nombre;
         this.curso = curso;
@@ -30,6 +31,7 @@ public class Asesor {
         this.fechadecreacion = fechadecreacion;
         this.fechaactualizacion = fechaactualizacion;
         this.verificacion = verificacion;
+        this.condicion=condicion;
     }
 
     public Long getValoracion1() {
@@ -143,5 +145,13 @@ public class Asesor {
 
     public void setVerificacion(boolean verificacion) {
         this.verificacion = verificacion;
+    }
+
+    public boolean isCondicion() {
+        return condicion;
+    }
+
+    public void setCondicion(boolean condicion) {
+        this.condicion = condicion;
     }
 }

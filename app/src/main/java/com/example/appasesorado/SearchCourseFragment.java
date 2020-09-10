@@ -113,10 +113,12 @@ public class SearchCourseFragment extends Fragment {
                     Asesor asesor = ds.getValue(Asesor.class);
                     assert asesor != null;
                     if (asesor.isVerificacion()) {
-                        AsesorList.add(asesor);
-                        adapterAsesor = new AdapterAsesor(getActivity(), AsesorList);
-                        recyclerView.setAdapter(adapterAsesor);
-                    } else {
+                        if(asesor.isCondicion()){
+                            AsesorList.add(asesor);
+                            adapterAsesor = new AdapterAsesor(getActivity(), AsesorList);
+                            recyclerView.setAdapter(adapterAsesor);
+                        }
+
                     }
                 }
             }
@@ -141,14 +143,20 @@ public class SearchCourseFragment extends Fragment {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Asesor asesor = ds.getValue(Asesor.class);
                     //obtener toda la data
-                    if (asesor.getNombre().toLowerCase().contains(query.toLowerCase()) ||
-                            asesor.getCurso().toLowerCase().contains(query.toLowerCase()) ||
-                            asesor.getValoracion1().toString().contains(query.toLowerCase()) ||
-                            asesor.getSkill().toLowerCase().contains(query.toLowerCase())) {
+                    assert asesor != null;
+                    if (asesor.isVerificacion()) {
+                        if(asesor.isCondicion()){
+                            if (asesor.getNombre().toLowerCase().contains(query.toLowerCase()) ||
+                                    asesor.getCurso().toLowerCase().contains(query.toLowerCase()) ||
+                                    asesor.getValoracion1().toString().contains(query.toLowerCase()) ||
+                                    asesor.getSkill().toLowerCase().contains(query.toLowerCase())) {
 
-                        AsesorList.add(asesor);
+                                AsesorList.add(asesor);
 
+                            }
+                        }
                     }
+
 
                     //Adapter
                     adapterAsesor = new AdapterAsesor(getActivity(), AsesorList);
