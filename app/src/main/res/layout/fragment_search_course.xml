@@ -15,7 +15,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="20dp"
         android:fontFamily="@font/brandon_medium"
-        android:text="@string/busque_por_curso_nombre_y_valoracion_a_los_mejores_asesores"
+        android:text="@string/titulo"
         android:textAlignment="center"
         android:textColor="@color/negro"
         android:textSize="25sp"

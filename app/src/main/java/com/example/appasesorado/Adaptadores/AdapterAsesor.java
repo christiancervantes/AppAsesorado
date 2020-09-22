@@ -27,8 +27,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.appasesorado.Callback.ICommentCallbackListener;
 import com.example.appasesorado.Comun.Comun;
 import com.example.appasesorado.Modelos.Asesor;
+import com.example.appasesorado.Modelos.Celular;
 import com.example.appasesorado.Modelos.CommentModel;
+import com.example.appasesorado.Modelos.FCMSendData;
 import com.example.appasesorado.R;
+import com.example.appasesorado.Remote.IFCMService;
+import com.example.appasesorado.Remote.RetrofitFCMClient;
 import com.example.appasesorado.ui.CommentFragment;
 import com.example.appasesorado.ui.CommentViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -52,14 +56,23 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.Unbinder;
 import dmax.dialog.SpotsDialog;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> {
     Context context;
     List<Asesor> AsesorList;
+    List<Celular> CelularList;
+
+    //notificaciones
+    IFCMService ifcmService;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     FirebaseDatabase database;
     DatabaseReference commentRef;
@@ -69,11 +82,11 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
 
     public String idregistroasesoria;
 
-
-
-    public AdapterAsesor(Context context, List<Asesor> asesorList) {
+    public AdapterAsesor(Context context, List<Asesor> asesorList, List<Celular>celularList) {
         this.context = context;
         AsesorList = asesorList;
+        CelularList = celularList;
+
     }
 
     @NonNull
@@ -86,6 +99,8 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull AdapterAsesor.MyHolder myHolder, int position) {
+
+        ifcmService= RetrofitFCMClient.getInstance().create(IFCMService.class);
 
         String aseuid = AsesorList.get(position).getUid();
         String nombre = AsesorList.get(position).getNombre();
@@ -130,6 +145,8 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
         myHolder.celulartv.setOnClickListener(view ->
         {
             Comun.asesorseleccionado = AsesorList.get(position);
+            //Comun.celularActual = CelularList.get(position);
+
             System.out.println("  para ver si pasa qqui 0B0B0B0B0  ");
 
             String timeStamp = String.valueOf(System.currentTimeMillis());
@@ -141,26 +158,32 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
             boolean installed = appInstalledOrNot("com.whatsapp");
             if (installed)
             {
+                final String uuid = UUID.randomUUID().toString().replace("-", "");
                 //Guardar la asesoria dentro de la base de datos
                 HashMap<String, Object> asesoria = new HashMap<>();
-                asesoria.put("asesor", "" + aseuid);
+                asesoria.put("idAsesor", "" + aseuid);
                 asesoria.put("nombreAsesor",""+Comun.asesorseleccionado.getNombre());
-                asesoria.put("estudiante", "" + uid);
+                asesoria.put("idEstudiante", "" + uid);
                 asesoria.put("nombreEstudiante",""+Comun.actualUsuario.getNombre());
+                asesoria.put("universidad",""+"UTP");
+                asesoria.put("materia",""+"Redes2");
                 asesoria.put("timeStamp", "" + timeStamp);
-                asesoria.put("estado", "" + "en asesoria");
-                asesoria.put("fechahoraregis", hourdateFormataa.format(dateAse));
+                asesoria.put("estado", "" + "en curso");
+                asesoria.put("fechahorainicio", hourdateFormataa.format(dateAse));
                 asesoria.put("fechahorafin", "");
                 asesoria.put("fechahoraCancelar","");
-                asesoria.put("fechahoraRatingCommnet","");
-                asesoria.put("rating","");
-                asesoria.put("comment","");
+                asesoria.put("calificaciondelestudiante","");
+                asesoria.put("ratingdeestudiante","");
+                asesoria.put("commentdeestudiante","");
                 asesoria.put("pagada", 0);
+                asesoria.put("id",""+uuid);
                 //asesoria.put("fechahasesoria", "");
                 asesoria.put("estadoxyz", 0);
 
+
+
                 DatabaseReference referenceaseasoria = FirebaseDatabase.getInstance().getReference("asesorias");
-                referenceaseasoria.child(timeStamp).setValue(asesoria).addOnSuccessListener(aVoid -> {
+                referenceaseasoria.child(uuid).setValue(asesoria).addOnSuccessListener(aVoid -> {
                     //actualizar estado del asesor
                     DatabaseReference dbref = FirebaseDatabase.getInstance().getReference("asesores").child(aseuid);
                     HashMap<String, Object> hashMap = new HashMap<>();
@@ -190,7 +213,7 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
 
 
         //Cargar las asesorias registradas por el usuario
-        Query query = FirebaseDatabase.getInstance().getReference("asesorias").orderByChild("estudiante").equalTo(uid);
+        Query query = FirebaseDatabase.getInstance().getReference("asesorias").orderByChild("idEstudiante").equalTo(uid);
         query.addValueEventListener(new ValueEventListener()
         {
             @Override
@@ -201,7 +224,7 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
                 {
 
                     int estadoxyzA = ds.child("estadoxyz").getValue(Integer.class);
-                    String asesorA = ds.child("asesor").getValue(String.class);
+                    String asesorA = ds.child("idAsesor").getValue(String.class);
                     System.out.println(uid+" ,, uid C6C6C6C6C  ds.getKey()   //,,  "+ds.getKey()+ "    ---  ds.getChildrenCount() -- "+ds.getChildrenCount()+" asesorA // "+asesorA);
                     Comun.asesorseleccionado = AsesorList.get(position);
 
@@ -213,8 +236,6 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
                         myHolder.completarasesoria.setVisibility(View.VISIBLE);
                         myHolder.cancelarasesoria.setVisibility(View.VISIBLE);
                         myHolder.celulartv.setVisibility(View.GONE);
-                        System.out.println(" verdadero "+Comun.asesorseleccionado.getEstado());
-                        System.out.println(" uid "+Comun.actualUsuario.getUid());
 
                         idregistroasesoria = ds.getKey();
                         System.out.println(" VERDADERO  myHolder.textView2_idasesor // "+myHolder.textView2_idasesor.getText()+" asesorA-- "+asesorA+"  **** "+myHolder.textView2_idasesor.getText().toString().compareTo(asesorA));
@@ -247,8 +268,9 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
 
                     }
 
-                    System.out.println(" fin todos "+Comun.asesorseleccionado.getEstado());
-                    System.out.println(" uid "+Comun.actualUsuario.getUid());
+                    System.out.println(" nombre "+Comun.actualUsuario.getNombre());
+                    //System.out.println(" imei "+Comun.celularActual.getImei());
+                    System.out.println(" imei "+Comun.asesorseleccionado.getNombre());
                 }
             }
 
@@ -267,21 +289,6 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
                 Date dateAse = new Date();
                 DateFormat hourdateFormataa = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
-                /**
-                //actulizar estado de la asesoria
-                DatabaseReference dbref = FirebaseDatabase.getInstance().getReference("asesores").child(aseuid);
-                HashMap<String, Object> hashMap = new HashMap<>();
-                hashMap.put("estado", "finish asesoria");
-                dbref.updateChildren(hashMap);
-
-                //actualizar dato del estudiante
-                DatabaseReference estRef2= FirebaseDatabase.getInstance().getReference("estudiantes").child(Comun.actualUsuario.getUid());
-                HashMap<String, Object> hashMap2 = new HashMap<>();
-                hashMap2.put("estado","finish asesoria");
-                estRef2.updateChildren(hashMap2);
-                **/
-
-                //-*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*-
                 // actualizar la asesoría (abr -- 07-09-2020)
                 System.out.println(" idregistroasesoria..   "+idregistroasesoria);
                 DatabaseReference dbrefx = FirebaseDatabase.getInstance().getReference("asesorias").child(idregistroasesoria);
@@ -315,6 +322,7 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
 
                     }
                 });
+
                 btn_continuar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -328,14 +336,17 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
                         commentModel.setName(Comun.actualUsuario.getNombre());
                         commentModel.setComment(txtcomment.getText().toString());
                         commentModel.setRatingValue(ratingBar.getRating());
+
                         Map<String, Object> serverTimeStamp = new HashMap<>();
                         serverTimeStamp.put("timeStamp", ServerValue.TIMESTAMP);
+
                         commentModel.setCommentTimeStamp(serverTimeStamp);
                         //foodDetailViewModel.setCommentModel(commentModel);
 
                         //-*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*-
                         // actualizar la asesoría (abr -- 07-09-2020)
                         System.out.println(" idregistroasesoria..   "+idregistroasesoria);
+
                         DatabaseReference dbrefx = FirebaseDatabase.getInstance().getReference("asesorias").child(idregistroasesoria);
                         HashMap<String, Object> hashMap3 = new HashMap<>();
                         hashMap3.put("fechahoraRatingComment", hourdateFormataa.format(dateAse));  // abr-07-09-2020
@@ -353,6 +364,8 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()){
+
+
                                             //despues de enviar el comentario, se debe actualziar el rating
                                             dialog.dismiss();
                                             addRatingToFood(commentModel.getRatingValue());
@@ -445,9 +458,27 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
 
                                         if (task.isSuccessful()){
 
-                                            Toast.makeText(context, "Gracias por calificar ", Toast.LENGTH_SHORT).show();
-                                            Comun.asesorseleccionado = asesor;
-                                            //foodDetailViewModel.setFoodModel(asesor); //refrescar
+                                            Map<String, String> notiData = new HashMap<>();
+                                            notiData.put(Comun.NOTI_TITLE, "Nuevo Calificación"); //new order
+                                            notiData.put(Comun.NOTI_CONTENT, "Tienes una nueva calificación de " + Comun.actualUsuario.getNombre());
+
+                                            FCMSendData sendData = new FCMSendData(Comun.createTopicOrder(), notiData);
+
+                                            compositeDisposable.add(ifcmService.sendNotification(sendData)
+                                                    .subscribeOn(Schedulers.io())
+                                                    .observeOn(AndroidSchedulers.mainThread())
+                                                    .subscribe(fcmResponse -> {
+
+                                                        Toast.makeText(context, "Gracias por calificar ", Toast.LENGTH_SHORT).show();
+                                                        Comun.asesorseleccionado = asesor;
+                                                        //foodDetailViewModel.setFoodModel(asesor); //refrescar
+
+                                                            },throwable -> {
+                                                        Toast.makeText(context, "El pedido fue enviado pero fallo al enviar la notificación ", Toast.LENGTH_SHORT).show();
+
+                                                    }));
+
+
                                         }
                                     });
                         }

@@ -21,7 +21,7 @@
     </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="busque_por_curso_nombre_y_valoracion_a_los_mejores_asesores">Búsqueda por curso, nombre y valoración de los mejores asesores</string>
+    <string name="titulo">Búsqueda por curso, nombre y valoración de los mejores asesores</string>
     <string name="buscar_curso">Buscar curso</string>
 
 

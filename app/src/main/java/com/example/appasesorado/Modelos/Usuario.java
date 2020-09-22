@@ -2,25 +2,29 @@ package com.example.appasesorado.Modelos;
 
 public
 class Usuario {
-    private String uid,nombre,celular,spinner;
+    private String uid,nombre,celular,spinner,nroregistro;
     private String fechadecumpleaños,fechadecreacion,fechaactualizacion;
     private Double ratingValue;
     private Long ratingCount;
     private String estado;
+    private String imei;
 
     public Usuario() {
     }
 
-    public Usuario(String uid, String nombre, String celular, String spinner, String fechadecumpleaños, String fechadecreacion, String fechaactualizacion,String estado) {
+    public Usuario(String uid, String nombre, String celular, String spinner, String nroregistro, String fechadecumpleaños, String fechadecreacion, String fechaactualizacion, Double ratingValue, Long ratingCount, String estado, String imei) {
         this.uid = uid;
         this.nombre = nombre;
         this.celular = celular;
         this.spinner = spinner;
+        this.nroregistro = nroregistro;
         this.fechadecumpleaños = fechadecumpleaños;
         this.fechadecreacion = fechadecreacion;
         this.fechaactualizacion = fechaactualizacion;
+        this.ratingValue = ratingValue;
+        this.ratingCount = ratingCount;
         this.estado = estado;
-
+        this.imei = imei;
     }
 
     public String getEstado() {
@@ -101,5 +105,21 @@ class Usuario {
 
     public void setSpinner(String spinner) {
         this.spinner = spinner;
+    }
+
+    public String getImei() {
+        return imei;
+    }
+
+    public void setImei(String imei) {
+        this.imei = imei;
+    }
+
+    public String getNroregistro() {
+        return nroregistro;
+    }
+
+    public void setNroregistro(String nroregistro) {
+        this.nroregistro = nroregistro;
     }
 }

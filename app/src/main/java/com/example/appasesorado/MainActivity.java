@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +17,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
+
+    //boton de vuelve a presionar otra vez
+    private static final int INTERVALO = 2000; //2 segundos para salir
+    private long tiempoPrimerClick;
+
+
+
     FirebaseAuth firebaseAuth;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -24,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         //init
         firebaseAuth = FirebaseAuth.getInstance();
-//BottomNavigation
+        //BottomNavigation
 
 
         BottomNavigationView navigationView = findViewById(R.id.btn_nav);
@@ -36,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener selectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
@@ -83,10 +93,16 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
     }
 
+    //para presionar de nuevo y salir
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        finish();
+        if (tiempoPrimerClick + INTERVALO > System.currentTimeMillis()){
+            super.onBackPressed();
+            return;
+        }else {
+            Toast.makeText(this, "Vuelve a presionar para salir", Toast.LENGTH_SHORT).show();
+        }
+        tiempoPrimerClick = System.currentTimeMillis();
     }
 
 }

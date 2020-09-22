@@ -49,9 +49,13 @@
     </style>
 
     <style name="foodRatingBar" parent="android:Widget.RatingBar">
-
         <item name="android:minHeight">25dp</item>
         <item name="android:maxHeight">25dp</item>
     </style>
+
+
+    <style name="AlertDialogCustom" parent="android:Theme.Material.Light.Dialog.Alert">
+        <item name="android:colorPrimary">#000000</item>
+        <item name="android:colorAccent">#000000</item> </style>
 
 </resources>

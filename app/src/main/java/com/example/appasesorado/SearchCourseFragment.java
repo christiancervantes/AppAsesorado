@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.example.appasesorado.Adaptadores.AdapterAsesor;
 import com.example.appasesorado.Modelos.Asesor;
+import com.example.appasesorado.Modelos.Celular;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -44,6 +45,7 @@ public class SearchCourseFragment extends Fragment {
     RecyclerView recyclerView;
     AdapterAsesor adapterAsesor;
     List<Asesor> AsesorList;
+    List<Celular> CelularList;
     FirebaseDatabase firebaseDatabase;
     SearchView searchView;
 
@@ -115,7 +117,7 @@ public class SearchCourseFragment extends Fragment {
                     if (asesor.isVerificacion()) {
                         if(asesor.isCondicion()){
                             AsesorList.add(asesor);
-                            adapterAsesor = new AdapterAsesor(getActivity(), AsesorList);
+                            adapterAsesor = new AdapterAsesor(getActivity(), AsesorList,CelularList);
                             recyclerView.setAdapter(adapterAsesor);
                         }
 
@@ -159,7 +161,7 @@ public class SearchCourseFragment extends Fragment {
 
 
                     //Adapter
-                    adapterAsesor = new AdapterAsesor(getActivity(), AsesorList);
+                    adapterAsesor = new AdapterAsesor(getActivity(), AsesorList,CelularList);
                     //refresh adapter
                     adapterAsesor.notifyDataSetChanged();
                     recyclerView.setAdapter(adapterAsesor);
