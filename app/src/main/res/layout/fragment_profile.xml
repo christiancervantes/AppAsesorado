@@ -27,13 +27,11 @@
                 android:id="@+id/imgavatar"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
-                android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="20dp"
-                app:civ_border_color="@color/negro"
-                android:src="@drawable/man"
-                tools:ignore="MissingClass" />
+                android:src="@drawable/man1"
+                app:civ_border_color="@color/blanco">
+            </com.mikhaellopez.circularimageview.CircularImageView>
 
                 <TextView
                     android:id="@+id/txtnombre"

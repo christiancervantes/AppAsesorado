@@ -1,5 +1,6 @@
 package com.example.appasesorado;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -28,6 +29,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.mikhaellopez.circularimageview.CircularImageView;
 
 import butterknife.BindView;
 
@@ -39,7 +41,7 @@ public class ProfileFragment extends Fragment {
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
     TextView nameTv, celulartv;
-
+    CircularImageView imgavatar;
     Asesor asesor;
 
     RatingBar rating_bar3;
@@ -66,12 +68,15 @@ public class ProfileFragment extends Fragment {
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("estudiantes");
 
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Mi Perfil");
-
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Mi Perfil");
+        imgavatar = view.findViewById(R.id.imgavatar);
         nameTv = view.findViewById(R.id.txtnombre);
         rating_bar3 = view.findViewById(R.id.rating_bar3);
         celulartv = view.findViewById(R.id.txtcelular);
 
+        imgavatar.setOnClickListener(view1 -> {
+            showDialogSelecterAvatar();
+        });
         Query query = databaseReference.orderByChild("uid").equalTo(user.getUid());
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -79,8 +84,8 @@ public class ProfileFragment extends Fragment {
                 //revisar antes de obtener los datos
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     //get data
-                    Double ratingValue = Double.valueOf("" +ds.child("ratingValue").getValue());
-                    Long ratingCount = Long.valueOf("" +ds.child("ratingCount").getValue());
+                    Double ratingValue = Double.valueOf("" + ds.child("ratingValue").getValue());
+                    Long ratingCount = Long.valueOf("" + ds.child("ratingCount").getValue());
 
                     String name = "" + ds.child("nombre").getValue();
                     String celular = "Tu número es " + ds.child("celular").getValue();
@@ -88,8 +93,8 @@ public class ProfileFragment extends Fragment {
                     //set data
                     nameTv.setText(name);
 
-                        if (ratingValue!=null && ratingCount !=null)
-                            rating_bar3.setRating(ratingValue.floatValue()/ratingCount);
+                    if (ratingValue != null && ratingCount != null)
+                        rating_bar3.setRating(ratingValue.floatValue() / ratingCount);
 
                     celulartv.setText(celular);
 
@@ -102,6 +107,18 @@ public class ProfileFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    private void showDialogSelecterAvatar() {
+        Query queryavatar = databaseReference.orderByChild("uid").equalTo(user.getUid());
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(),R.style.DialogTheme);
+        builder.setCancelable(false);
+        builder.setTitle("Registro de datos");
+        View itemView = LayoutInflater.from(getContext()).inflate(R.layout.layout_register,null);
+        builder.setView(itemView);
+        final AlertDialog dialog = builder.create();
+        dialog.show();  //-----cambio 2
     }
 
     @Override
