@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,12 +18,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.appasesorado.Callback.ICommentCallbackListener;
 import com.example.appasesorado.Comun.Comun;
 import com.example.appasesorado.Modelos.Asesor;
 import com.example.appasesorado.Modelos.Celular;
@@ -34,9 +29,7 @@ import com.example.appasesorado.R;
 import com.example.appasesorado.Remote.IFCMService;
 import com.example.appasesorado.Remote.RetrofitFCMClient;
 import com.example.appasesorado.ui.CommentFragment;
-import com.example.appasesorado.ui.CommentViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -51,7 +44,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -59,8 +51,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import butterknife.BindView;
-import butterknife.Unbinder;
-import dmax.dialog.SpotsDialog;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -180,21 +170,12 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
                 //asesoria.put("fechahasesoria", "");
                 asesoria.put("estadoxyz", 0);
 
+                System.out.println("id asesor --->" + idasesor);
+                System.out.println("uid ---->"+uid);
 
 
                 DatabaseReference referenceaseasoria = FirebaseDatabase.getInstance().getReference("asesorias");
                 referenceaseasoria.child(uuid).setValue(asesoria).addOnSuccessListener(aVoid -> {
-                    //actualizar estado del asesor
-                    DatabaseReference dbref = FirebaseDatabase.getInstance().getReference("asesores").child(aseuid);
-                    HashMap<String, Object> hashMap = new HashMap<>();
-                    hashMap.put("estado", "en asesoria");
-                    dbref.updateChildren(hashMap);
-
-                    //actualizar dato del estudiante
-                    DatabaseReference estRef= FirebaseDatabase.getInstance().getReference("estudiantes").child(Comun.actualUsuario.getUid());
-                    HashMap<String, Object> hashMap2 = new HashMap<>();
-                    hashMap2.put("estado","en asesoria");
-                    estRef.updateChildren(hashMap2);
 
                     //Intent para abrir whatsapp
                     Intent intentWS = new Intent(Intent.ACTION_VIEW);
@@ -212,14 +193,14 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
         });
 
 
+
         //Cargar las asesorias registradas por el usuario
-        Query query = FirebaseDatabase.getInstance().getReference("asesorias").orderByChild("idEstudiante").equalTo(uid);
+        Query query = FirebaseDatabase.getInstance().getReference("asesorias").orderByChild("idEstudiante").equalTo(Comun.actualUsuario.getIdEstudiante());
         query.addValueEventListener(new ValueEventListener()
         {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot)
             {
-
                 for (DataSnapshot ds : snapshot.getChildren())
                 {
 
@@ -230,7 +211,7 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
 
                     //if (Comun.asesorseleccionado.getEstado().equals("en asesoria"))
                     //if (estadoxyzA == 0 && Comun.asesorseleccionado.getEstado().equals("en asesoria"))
-                    if (estadoxyzA == 0 && myHolder.textView2_idasesor.getText().toString().compareTo(asesorA) == 0)
+                    if (estadoxyzA == 0)
                     {
                         //   if ( Comun.actualUsuario.getEstado().equals("en asesoria")){
                         myHolder.completarasesoria.setVisibility(View.VISIBLE);
@@ -238,39 +219,36 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
                         myHolder.celulartv.setVisibility(View.GONE);
 
                         idregistroasesoria = ds.getKey();
-                        System.out.println(" VERDADERO  myHolder.textView2_idasesor // "+myHolder.textView2_idasesor.getText()+" asesorA-- "+asesorA+"  **** "+myHolder.textView2_idasesor.getText().toString().compareTo(asesorA));
+
+                        //System.out.println(" VERDADERO  myHolder.textView2_idasesor // "+myHolder.textView2_idasesor.getText()+" asesorA-- "+asesorA+"  **** "+myHolder.textView2_idasesor.getText().toString().compareTo(asesorA));
 
                     }
 
                     //else
                     //if (estadoxyzA == 1 && Comun.asesorseleccionado.getEstado().equals("finish asesoria"))
-                    if (estadoxyzA == 1 && myHolder.textView2_idasesor.getText().toString().compareTo(asesorA) == 0)
+                    if (estadoxyzA == 1 )
                     {
                         System.out.println(" Falso "+Comun.asesorseleccionado.getEstado());
-                        System.out.println(" uid "+Comun.actualUsuario.getUid());
+                        System.out.println(" uid "+Comun.actualUsuario.getIdEstudiante());
                         myHolder.completarasesoria.setVisibility(View.GONE);
                         myHolder.cancelarasesoria.setVisibility(View.GONE);
                         myHolder.celulartv.setVisibility(View.VISIBLE);
                         idregistroasesoria = ds.getKey();
-                        System.out.println(" FALSOX9X9 myHolder.textView2_idasesor // "+myHolder.textView2_idasesor.getText()+" asesorA ** "+asesorA+"  **** "+myHolder.textView2_idasesor.getText().toString().compareTo(asesorA));
+                        //System.out.println(" FALSOX9X9 myHolder.textView2_idasesor // "+myHolder.textView2_idasesor.getText()+" asesorA ** "+asesorA+"  **** "+myHolder.textView2_idasesor.getText().toString().compareTo(asesorA));
 
                     }
 
-                    if (estadoxyzA == -1 && myHolder.textView2_idasesor.getText().toString().compareTo(asesorA) == 0)
+                    if (estadoxyzA == -1 )
                     {
                         System.out.println(" Falso "+Comun.asesorseleccionado.getEstado());
-                        System.out.println(" uid "+Comun.actualUsuario.getUid());
+                        System.out.println(" uid "+Comun.actualUsuario.getIdEstudiante());
                         myHolder.completarasesoria.setVisibility(View.GONE);
                         myHolder.cancelarasesoria.setVisibility(View.GONE);
                         myHolder.celulartv.setVisibility(View.VISIBLE);
                         idregistroasesoria = ds.getKey();
-                        System.out.println(" FALSOX9X9 myHolder.textView2_idasesor // "+myHolder.textView2_idasesor.getText()+" asesorA ** "+asesorA+"  **** "+myHolder.textView2_idasesor.getText().toString().compareTo(asesorA));
+                        //System.out.println(" FALSOX9X9 myHolder.textView2_idasesor // "+myHolder.textView2_idasesor.getText()+" asesorA ** "+asesorA+"  **** "+myHolder.textView2_idasesor.getText().toString().compareTo(asesorA));
 
                     }
-
-                    System.out.println(" nombre "+Comun.actualUsuario.getNombre());
-                    //System.out.println(" imei "+Comun.celularActual.getImei());
-                    System.out.println(" imei "+Comun.asesorseleccionado.getNombre());
                 }
             }
 

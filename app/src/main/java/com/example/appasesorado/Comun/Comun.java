@@ -13,7 +13,6 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
 import com.example.appasesorado.Modelos.Asesor;
@@ -21,9 +20,6 @@ import com.example.appasesorado.Modelos.Celular;
 import com.example.appasesorado.Modelos.TokenModel;
 import com.example.appasesorado.Modelos.Usuario;
 import com.example.appasesorado.R;
-import com.example.appasesorado.Services.MyFCMServices;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.FirebaseDatabase;
 
 public
@@ -94,7 +90,7 @@ class Comun {
         if (Comun.actualUsuario !=null){ //arregla el bug de la localizacion al desintalar
             FirebaseDatabase.getInstance()
                     .getReference(Comun.TOKEN_REF)
-                    .child(Comun.actualUsuario.getUid())
+                    .child(Comun.actualUsuario.getIdEstudiante())
                     .setValue(new TokenModel(Comun.actualUsuario.getCelular(),Comun.actualUsuario.getNombre(),newToken))
                     .addOnFailureListener(e -> {
                         Toast.makeText(context, ""+e.getMessage(), Toast.LENGTH_SHORT).show();

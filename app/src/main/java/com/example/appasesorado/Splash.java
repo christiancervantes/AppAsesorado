@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.appasesorado.Modelos.TokenModel;
 import com.example.appasesorado.Modelos.Usuario;
 
 import android.Manifest;
@@ -64,7 +63,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Action;
 
 public class Splash extends AppCompatActivity {
@@ -323,7 +321,7 @@ public class Splash extends AppCompatActivity {
 
                 //registro de usuario
                 Usuario usuario = new Usuario();
-                usuario.setUid(user.getUid());
+                usuario.setIdEstudiante(user.getUid());
                 usuario.setNombre(edt_nombre.getText().toString());
                 usuario.setCelular(edt_celular.getText().toString());
                 usuario.setFechadecumpleaños(edt_fechadenacimiento.getText().toString());
