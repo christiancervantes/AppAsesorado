@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:weightSum="14">
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="50dp"
+        android:layout_marginRight="8dp"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:layout_weight="2"
+        android:src="@drawable/ic_baseline_account_circle_24"></ImageView>
+
+
+    <LinearLayout
+        android:id="@+id/mostrarcomentarios"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:weightSum="2"
+        android:layout_weight="9"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txt_comment_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/brandon_medium"
+            android:text="Nombre"
+            android:textColor="@color/negro"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/txt_skill"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/brandon_medium"
+            android:text="Skill's"
+            android:textColor="@color/negro"
+            android:textSize="14sp" />
+
+        <RatingBar
+            android:id="@+id/rating_bar2"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/blanco"
+            android:backgroundTint="@color/blanco"
+            android:isIndicator="true"
+            android:numStars="5"
+            android:max="5"
+            android:progressBackgroundTint="@color/primaryColor"
+            android:progressTint="@color/primaryColor"
+            android:secondaryProgressTint="@color/primaryColor"
+            android:stepSize="0.5"></RatingBar>
+
+        <TextView
+            android:id="@+id/valoracion1"
+            android:text="4"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></TextView>
+
+        <TextView
+            android:id="@+id/txt_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/brandon_medium"
+            android:text="Comentario"
+            android:textColor="@color/negro"
+            android:textSize="13sp"
+            android:textStyle="italic" />
+
+        <!--botones para finalizar asesoria y cancelar, agregar diseño-->
+        <LinearLayout
+            android:id="@+id/linearbotones"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:padding="2dp">
+
+            <Button
+                android:id="@+id/cancelarasesoria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/plomoclaro"
+                android:drawableStart="@drawable/ic_baseline_cancel_24"
+                android:fontFamily="@font/brandon_medium"
+                android:text="Cancelar"
+                android:drawableTint="@color/negro"
+                android:layout_weight="1"
+                android:textColor="@color/negro"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:visibility="gone">
+
+            </Button>
+
+            <Button
+                android:id="@+id/finishasedsoria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@color/primaryColor"
+                android:drawableStart="@drawable/ic_baseline_check_circle_24"
+                android:drawableTint="@color/blanco"
+                android:fontFamily="@font/brandon_medium"
+                android:text="Finalizar"
+                android:textColor="@color/blanco"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:visibility="gone">
+
+            </Button>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/tvwas"
+        android:layout_width="30dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center_vertical|end"
+        android:layout_marginStart="10dp"
+        android:layout_weight="2"
+        android:orientation="vertical"
+        android:src="@drawable/whatsappblack">
+
+
+    </ImageView>
+
+    <TextView
+        android:id="@+id/textView2_idasesor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:text="TextView"
+        android:visibility="gone" />
+
+</LinearLayout>

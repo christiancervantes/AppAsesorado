@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:padding="16dp"
     android:background="@color/blanco"
+    android:windowSoftInputMode="stateHidden|adjustResize"
     android:layout_height="match_parent">
 
     <TextView
@@ -14,7 +15,7 @@
         android:layout_height="1dp"
         android:text="fechacreacion"
         android:textColor="@color/blanco"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/fechaactualizacion" />
@@ -25,7 +26,37 @@
         android:layout_height="1dp"
         android:text="fechaactualizacion"
         android:textColor="@color/blanco"
-        android:visibility="invisible"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="16dp" />
+
+    <TextView
+        android:id="@+id/imeiPhoner"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:text="0"
+        android:textColor="@color/blanco"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="16dp" />
+
+    <TextView
+        android:id="@+id/modelo"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:text="Xiomi"
+        android:textColor="@color/blanco"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="16dp" />
+
+    <TextView
+        android:id="@+id/nroregistro"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:text="0"
+        android:textColor="@color/blanco"
+        android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="16dp" />
 
@@ -41,104 +72,104 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.024"></TextView>
+        app:layout_constraintVertical_bias="0.024" />
 
-    <EditText
+
+    <com.rengwuxian.materialedittext.MaterialEditText
         android:id="@+id/edt_nombre"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/boton4"
-        android:hint="Ingrese tu nombre"
-        android:imeActionLabel="Siguiente"
-        android:imeOptions="actionNext"
+        android:hint="Ingrese su Nombres y Apellidos"
+        android:imeActionLabel="Terminado"
+        android:imeOptions="actionDone"
         android:inputType="textCapWords"
         android:singleLine="true"
-        android:textAlignment="center"
-        android:textColor="@color/negro"
+        android:textColor="@android:color/black"
+        android:textColorHint="@android:color/black"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.937"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintVertical_bias="0.063"
+        app:met_baseColor="@android:color/black"
+        app:met_floatingLabel="highlight"
+        app:met_floatingLabelTextSize="17dp"
+        app:met_primaryColor="@android:color/black"
+        app:met_singleLineEllipsis="true" />
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/edt_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint=""
+        android:imeActionLabel="Siguiente"
+        android:imeOptions="actionDone"
+        android:inputType="textCapWords"
+        android:singleLine="true"
+        android:textColor="@android:color/black"
+        android:textColorHint="@android:color/black"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.082"></EditText>
+        app:layout_constraintTop_toBottomOf="@+id/edt_nombre"
+        app:layout_constraintVertical_bias="0.0"
+        app:met_baseColor="@android:color/black"
+        app:met_floatingLabel="highlight"
+        app:met_floatingLabelTextSize="17dp"
+        app:met_primaryColor="@android:color/black"
+        app:met_singleLineEllipsis="true" />
 
-    <EditText
-        android:id="@+id/edt_apellido"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/boton4"
-        android:hint="Ingrese tu apellido"
-        android:imeActionLabel="Siguiente"
-        android:imeOptions="actionNext"
-        android:inputType="textCapWords"
-        android:singleLine="true"
-        android:textAlignment="center"
-        android:textColor="@color/negro"
-        android:textSize="20dp"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edt_nombre"></EditText>
-
-    <EditText
-        android:id="@+id/edt_phone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/boton4"
-        android:clickable="false"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:hint="+51 999888777"
-        android:imeActionLabel="Siguiente"
-        android:imeOptions="actionNext"
-        android:inputType="textCapWords"
-        android:singleLine="true"
-        android:textAlignment="center"
-        android:textColor="@color/negro"
-        android:textColorHint="@color/negro"
-        android:textSize="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edt_apellido"></EditText>
-
-
-    <EditText
+    <com.rengwuxian.materialedittext.MaterialEditText
         android:id="@+id/edt_fechadenacimiento"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="21dp"
-        android:background="@drawable/boton4"
-        android:clickable="false"
+        android:clickable="true"
         android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:hint="Ingrese su Fecha de Nacimiento"
+        android:hint="Ingrese su Fecha de Cumpleaños"
         android:inputType="date"
-        android:textAlignment="center"
         android:textColor="@android:color/black"
+        android:textColorHint="@android:color/black"
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.156"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edt_phone"></EditText>
+        app:layout_constraintTop_toBottomOf="@+id/edt_phone"
+        app:met_baseColor="@android:color/black"
+        app:met_floatingLabel="highlight"
+        app:met_floatingLabelTextSize="17dp"
+        app:met_primaryColor="@android:color/black"
+        app:met_singleLineEllipsis="true" />
 
-    <Button
-        android:id="@+id/btn_continuar"
+    <CheckBox
+        android:id="@+id/cbxterminos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="108dp"
-        android:background="@drawable/boton1"
-        android:fontFamily="@font/belleza"
-        android:text="Continuar"
+        android:layout_marginTop="92dp"
+        android:layout_marginBottom="20dp"
+        android:text="Aceptar Términos y Cóndiciones"
+        app:layout_constraintBottom_toTopOf="@+id/btnRegistrar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edt_fechadenacimiento"
+        app:layout_constraintVertical_bias="0.454"></CheckBox>
 
+    <Button
+        android:id="@+id/btnRegistrar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="44dp"
+        android:background="@color/negro"
+        android:fontFamily="@font/belleza"
+        android:text="Registrar"
         android:textColor="@color/blanco"
         android:textSize="17dp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edt_fechadenacimiento"></Button>
+        app:layout_constraintHorizontal_bias="0.843"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

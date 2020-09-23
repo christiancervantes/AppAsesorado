@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:text="No puedes registrar más de 2 cuentas diferentes en este dispositivo."
+        android:textSize="22sp"
+        android:fontFamily="@font/belleza"
+        android:gravity="center_horizontal"
+        android:textColor="@color/negro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></TextView>
+
+    <TextView
+        android:layout_marginTop="25dp"
+        android:text="Si deseas una apelación. Contactarse al siguiente correo:"
+        android:textSize="14sp"
+        android:fontFamily="@font/belleza"
+        android:gravity="center_horizontal"
+        android:textColor="@color/negro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></TextView>
+
+    <TextView
+        android:layout_marginTop="5dp"
+        android:text="appasesorado@gmail.com"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/belleza"
+        android:gravity="center_horizontal"
+        android:textColor="@color/negro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></TextView>
+
+    <TextView
+        android:layout_marginTop="5dp"
+        android:text="con asunto: Apelación de cuenta"
+        android:textSize="12sp"
+        android:fontFamily="@font/belleza"
+        android:gravity="center_horizontal"
+        android:textColor="@color/negro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></TextView>
+
+</LinearLayout>

@@ -2,39 +2,45 @@ package com.example.appasesorado.Modelos;
 
 public
 class Usuario {
-    private String uid,nombre,apellido,celular,spinner;
+    private String idEstudiante,nombre,celular,spinner,nroregistro;
     private String fechadecumpleaños,fechadecreacion,fechaactualizacion;
-    private double rating;
+    private Double ratingValue;
+    private Long ratingCount;
+    private String estado;
+    private String imei;
 
     public Usuario() {
     }
 
-    public Usuario(String uid, String nombre, String apellido, String celular, String spinner, String fechadecumpleaños, String fechadecreacion, String fechaactualizacion, double rating) {
-        this.uid = uid;
+    public Usuario(String idEstudiante, String nombre, String celular, String spinner, String nroregistro, String fechadecumpleaños, String fechadecreacion, String fechaactualizacion, Double ratingValue, Long ratingCount, String estado, String imei) {
+        this.idEstudiante = idEstudiante;
         this.nombre = nombre;
-        this.apellido = apellido;
         this.celular = celular;
         this.spinner = spinner;
+        this.nroregistro = nroregistro;
         this.fechadecumpleaños = fechadecumpleaños;
         this.fechadecreacion = fechadecreacion;
         this.fechaactualizacion = fechaactualizacion;
-        this.rating = rating;
+        this.ratingValue = ratingValue;
+        this.ratingCount = ratingCount;
+        this.estado = estado;
+        this.imei = imei;
     }
 
-    public String getApellido() {
-        return apellido;
+    public String getEstado() {
+        return estado;
     }
 
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
-    public String getUid() {
-        return uid;
+    public String getIdEstudiante() {
+        return idEstudiante;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
+    public void setIdEstudiante(String idEstudiante) {
+        this.idEstudiante = idEstudiante;
     }
 
     public String getNombre() {
@@ -77,12 +83,20 @@ class Usuario {
         this.fechaactualizacion = fechaactualizacion;
     }
 
-    public double getRating() {
-        return rating;
+    public Double getRatingValue() {
+        return ratingValue;
     }
 
-    public void setRating(double rating) {
-        this.rating = rating;
+    public void setRatingValue(Double ratingValue) {
+        this.ratingValue = ratingValue;
+    }
+
+    public Long getRatingCount() {
+        return ratingCount;
+    }
+
+    public void setRatingCount(Long ratingCount) {
+        this.ratingCount = ratingCount;
     }
 
     public String getSpinner() {
@@ -91,5 +105,21 @@ class Usuario {
 
     public void setSpinner(String spinner) {
         this.spinner = spinner;
+    }
+
+    public String getImei() {
+        return imei;
+    }
+
+    public void setImei(String imei) {
+        this.imei = imei;
+    }
+
+    public String getNroregistro() {
+        return nroregistro;
+    }
+
+    public void setNroregistro(String nroregistro) {
+        this.nroregistro = nroregistro;
     }
 }

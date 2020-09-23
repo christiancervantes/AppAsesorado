@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/blanco">
+
+    <TextView
+        android:id="@+id/txtindicacion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:fontFamily="@font/brandon_medium"
+        android:gravity="center"
+        android:text="Por favor, valore la atención de su asesor en el siguiente panel"
+        android:textAlignment="center"
+        android:textColor="@color/negro"
+        android:textSize="18sp"
+        android:textStyle="bold">
+
+    </TextView>
+
+    <RatingBar
+        android:id="@+id/rating_bar_toset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/txtindicacion"
+        android:layout_centerHorizontal="true"
+        android:numStars="5"
+        android:max="5"
+        android:stepSize="1.0"
+        android:progressBackgroundTint="#FBCCD5"
+        android:progressTint="@color/primaryColor"
+        android:secondaryProgressTint="@color/primaryColor"></RatingBar>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textfield"
+        android:layout_width="match_parent"
+        app:hintTextColor="@color/negro"
+        android:paddingTop="10dp"
+        android:layout_below="@+id/rating_bar_toset"
+        android:layout_height="wrap_content">
+
+    <EditText
+        android:id="@+id/commenttxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/editextstyle"
+        android:gravity="start"
+        android:textSize="12dp"
+        android:textColor="@color/negro"
+        android:visibility="invisible"
+        android:padding="10dp"
+        android:textColorHint="@color/negro"
+        android:inputType="textCapSentences|textMultiLine"
+        android:minHeight="150dp"
+        android:layout_below="@+id/rating_bar_toset">
+    </EditText>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/btn_siguiente"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textfield"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/corner"
+        android:backgroundTint="#272626"
+        android:fontFamily="@font/brandon_medium"
+        android:text="continuar"
+        android:textColor="@color/blanco"
+        android:textStyle="bold"
+        android:visibility="invisible">
+
+    </Button>
+
+</RelativeLayout>

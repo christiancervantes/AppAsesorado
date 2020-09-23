@@ -8,7 +8,7 @@
     </style>
     
     <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">@drawable/logoapp2</item>
+        <item name="android:windowBackground">@drawable/splash</item>
         <item name="android:animation">@anim/animacion1</item>
     </style>
     
@@ -33,5 +33,29 @@
         <item name="android:windowFullscreen">true</item>
 
     </style>
+
+    <style name="DialogTheme" parent="android:Theme.Dialog">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+
+        <item name="android:windowBackground">@color/blanco</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">false</item>
+    </style>
+    <style name="AppTheme2" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorAccent">@color/primaryLightColor</item>
+    </style>
+
+    <style name="foodRatingBar" parent="android:Widget.RatingBar">
+        <item name="android:minHeight">25dp</item>
+        <item name="android:maxHeight">25dp</item>
+    </style>
+
+
+    <style name="AlertDialogCustom" parent="android:Theme.Material.Light.Dialog.Alert">
+        <item name="android:colorPrimary">#000000</item>
+        <item name="android:colorAccent">#000000</item> </style>
 
 </resources>
