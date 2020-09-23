@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.cardview.widget.CardView;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 
@@ -30,6 +31,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.mikhaellopez.circularimageview.CircularImageView;
+
+import java.util.HashMap;
 
 import butterknife.BindView;
 
@@ -89,6 +92,30 @@ public class ProfileFragment extends Fragment {
 
                     String name = "" + ds.child("nombre").getValue();
                     String celular = "Tu número es " + ds.child("celular").getValue();
+                    String tipo = "" + ds.child("tipo").getValue();
+                    switch (tipo){
+                        case "estu1":
+                            imgavatar.setImageResource(R.drawable.man1);
+                            break;
+                        case "estu2":
+                            imgavatar.setImageResource(R.drawable.man2);
+                            break;
+                        case "estu3":
+                            imgavatar.setImageResource(R.drawable.man3);
+                            break;
+                        case "estu4":
+                            imgavatar.setImageResource(R.drawable.girl11);
+                            break;
+                        case "estu5":
+                            imgavatar.setImageResource(R.drawable.woman2);
+                            break;
+                        case "estu6":
+                            imgavatar.setImageResource(R.drawable.woman);
+                            break;
+                        default:
+                            imgavatar.setImageResource(R.drawable.whatsapp);
+                            break;
+                    }
 
                     //set data
                     nameTv.setText(name);
@@ -110,15 +137,69 @@ public class ProfileFragment extends Fragment {
     }
 
     private void showDialogSelecterAvatar() {
-        Query queryavatar = databaseReference.orderByChild("uid").equalTo(user.getUid());
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(),R.style.DialogTheme);
-        builder.setCancelable(false);
-        builder.setTitle("Registro de datos");
-        View itemView = LayoutInflater.from(getContext()).inflate(R.layout.layout_register,null);
+        //carga vista de selector de avatares
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setCancelable(true);
+        View itemView = LayoutInflater.from(getContext()).inflate(R.layout.layout_avatar_select, null);
         builder.setView(itemView);
         final AlertDialog dialog = builder.create();
-        dialog.show();  //-----cambio 2
+        dialog.show();
+
+
+        CardView estu1=itemView.findViewById(R.id.card_estu1);
+        CardView estu2=itemView.findViewById(R.id.card_estu2);
+        CardView estu3=itemView.findViewById(R.id.card_estu3);
+        CardView estu4=itemView.findViewById(R.id.card_estu4);
+        CardView estu5=itemView.findViewById(R.id.card_estu5);
+        CardView estu6=itemView.findViewById(R.id.card_estu6);
+        estu1.setOnClickListener(view -> {
+            DatabaseReference dbrefx = FirebaseDatabase.getInstance().getReference("estudiantes").child(user.getUid());
+            HashMap<String, Object> hashMap3 = new HashMap<>();
+            hashMap3.put("tipo", "estu1");
+            dbrefx.updateChildren(hashMap3);
+            dialog.dismiss();
+        });
+        estu2.setOnClickListener(view -> {
+            DatabaseReference dbrefx = FirebaseDatabase.getInstance().getReference("estudiantes").child(user.getUid());
+            HashMap<String, Object> hashMap3 = new HashMap<>();
+            hashMap3.put("tipo", "estu2");
+            dbrefx.updateChildren(hashMap3);
+            dialog.dismiss();
+        });
+        estu3.setOnClickListener(view -> {
+            DatabaseReference dbrefx = FirebaseDatabase.getInstance().getReference("estudiantes").child(user.getUid());
+            HashMap<String, Object> hashMap3 = new HashMap<>();
+            hashMap3.put("tipo", "estu3");
+            dbrefx.updateChildren(hashMap3);
+            dialog.dismiss();
+        });
+        estu4.setOnClickListener(view -> {
+            DatabaseReference dbrefx = FirebaseDatabase.getInstance().getReference("estudiantes").child(user.getUid());
+            HashMap<String, Object> hashMap3 = new HashMap<>();
+            hashMap3.put("tipo", "estu4");
+            dbrefx.updateChildren(hashMap3);
+            dialog.dismiss();
+        });
+        estu5.setOnClickListener(view -> {
+            DatabaseReference dbrefx = FirebaseDatabase.getInstance().getReference("estudiantes").child(user.getUid());
+            HashMap<String, Object> hashMap3 = new HashMap<>();
+            hashMap3.put("tipo", "estu5");
+            dbrefx.updateChildren(hashMap3);
+            dialog.dismiss();
+
+        });
+        estu6.setOnClickListener(view -> {
+            DatabaseReference dbrefx = FirebaseDatabase.getInstance().getReference("estudiantes").child(user.getUid());
+            HashMap<String, Object> hashMap3 = new HashMap<>();
+            hashMap3.put("tipo", "estu6");
+            dbrefx.updateChildren(hashMap3);
+            dialog.dismiss();
+        });
+
+
+
+
     }
 
     @Override
