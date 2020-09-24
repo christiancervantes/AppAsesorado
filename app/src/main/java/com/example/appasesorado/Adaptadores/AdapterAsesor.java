@@ -26,6 +26,7 @@ import com.example.appasesorado.Modelos.Celular;
 import com.example.appasesorado.Modelos.CommentModel;
 import com.example.appasesorado.Modelos.FCMSendData;
 import com.example.appasesorado.Modelos.TokenModel;
+import com.example.appasesorado.Modelos.Usuario;
 import com.example.appasesorado.R;
 import com.example.appasesorado.Remote.IFCMService;
 import com.example.appasesorado.Remote.RetrofitFCMClient;
@@ -291,11 +292,12 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
 
                         database = FirebaseDatabase.getInstance();
                         commentRef = database.getReference(Comun.COMMENT_REF);
-
                         CommentModel commentModel = new CommentModel();
+                        commentModel.setIdEstudiante(FirebaseAuth.getInstance().getCurrentUser().getUid());
                         commentModel.setName(Comun.actualUsuario.getNombre());
                         commentModel.setComment(txtcomment.getText().toString());
                         commentModel.setRatingValue(ratingBar.getRating());
+                        commentModel.setAvatar(Comun.actualUsuario.getTipo());
 
                         Map<String, Object> serverTimeStamp = new HashMap<>();
                         serverTimeStamp.put("timeStamp", ServerValue.TIMESTAMP);

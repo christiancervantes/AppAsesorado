@@ -8,11 +8,12 @@ class Usuario {
     private Long ratingCount;
     private String estado;
     private String imei;
+    private String tipo;
 
     public Usuario() {
     }
 
-    public Usuario(String idEstudiante, String nombre, String celular, String spinner, String nroregistro, String fechadecumpleaños, String fechadecreacion, String fechaactualizacion, Double ratingValue, Long ratingCount, String estado, String imei) {
+    public Usuario(String idEstudiante, String nombre, String celular, String spinner, String nroregistro, String fechadecumpleaños, String fechadecreacion, String fechaactualizacion, Double ratingValue, Long ratingCount, String estado, String imei, String tipo) {
         this.idEstudiante = idEstudiante;
         this.nombre = nombre;
         this.celular = celular;
@@ -25,6 +26,7 @@ class Usuario {
         this.ratingCount = ratingCount;
         this.estado = estado;
         this.imei = imei;
+        this.tipo = tipo;
     }
 
     public String getEstado() {
@@ -121,5 +123,13 @@ class Usuario {
 
     public void setNroregistro(String nroregistro) {
         this.nroregistro = nroregistro;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 }

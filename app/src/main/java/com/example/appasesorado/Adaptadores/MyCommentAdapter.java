@@ -5,6 +5,7 @@ import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -13,6 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.appasesorado.Modelos.CommentModel;
 import com.example.appasesorado.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
@@ -21,7 +28,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public
-class MyCommentAdapter  extends RecyclerView.Adapter<MyCommentAdapter.MyViewHolder> {
+class MyCommentAdapter extends RecyclerView.Adapter<MyCommentAdapter.MyViewHolder> {
     Context context;
     List<CommentModel> commentModelList;
 
@@ -33,17 +40,43 @@ class MyCommentAdapter  extends RecyclerView.Adapter<MyCommentAdapter.MyViewHold
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new MyViewHolder(LayoutInflater.from(context).inflate(R.layout.layout_comment_item,parent,false));
+        return new MyViewHolder(LayoutInflater.from(context).inflate(R.layout.layout_comment_item, parent, false));
 
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        Long timeStamp = Long.valueOf(commentModelList.get(position).getCommentTimeStamp().get("timeStamp").toString());
+        long timeStamp = Long.parseLong(commentModelList.get(position).getCommentTimeStamp().get("timeStamp").toString());
         holder.txt_comment_date.setText(DateUtils.getRelativeTimeSpanString(timeStamp));
         holder.txt_comment.setText(commentModelList.get(position).getComment());
         holder.txt_comment_name.setText(commentModelList.get(position).getName());
         holder.ratingBar.setRating(commentModelList.get(position).getRatingValue());
+        String tipo=commentModelList.get(position).getAvatar();
+        switch (tipo) {
+            case "estu1":
+                holder.imgavatarcommet.setImageResource(R.drawable.man1);
+                break;
+            case "estu2":
+                holder.imgavatarcommet.setImageResource(R.drawable.man2);
+                break;
+            case "estu3":
+                holder.imgavatarcommet.setImageResource(R.drawable.man3);
+                break;
+            case "estu4":
+                holder.imgavatarcommet.setImageResource(R.drawable.girl11);
+                break;
+            case "estu5":
+                holder.imgavatarcommet.setImageResource(R.drawable.woman2);
+                break;
+            case "estu6":
+                holder.imgavatarcommet.setImageResource(R.drawable.woman);
+                break;
+            default:
+                holder.imgavatarcommet.setImageResource(R.drawable.man1);
+
+        }
+
+
 
     }
 
@@ -52,7 +85,7 @@ class MyCommentAdapter  extends RecyclerView.Adapter<MyCommentAdapter.MyViewHold
         return commentModelList.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder {
 
         Unbinder unbinder;
         @BindView(R.id.txt_comment_date)
@@ -67,9 +100,12 @@ class MyCommentAdapter  extends RecyclerView.Adapter<MyCommentAdapter.MyViewHold
         @BindView(R.id.rating_bar)
         RatingBar ratingBar;
 
+        @BindView(R.id.imgavatarcommet)
+        ImageView imgavatarcommet;
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            unbinder = ButterKnife.bind(this,itemView);
+            unbinder = ButterKnife.bind(this, itemView);
         }
     }
 }

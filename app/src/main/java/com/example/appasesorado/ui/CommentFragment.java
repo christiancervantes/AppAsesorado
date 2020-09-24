@@ -91,7 +91,7 @@ public class CommentFragment  extends BottomSheetDialogFragment implements IComm
                 .child(Comun.asesorseleccionado.getUid()) // con esto selecciono al asesor seleccionado
                 .orderByChild("commentTimeStamp")
                 .limitToLast(100)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+                .addValueEventListener((new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot commentSnapShot:dataSnapshot.getChildren()){
@@ -114,7 +114,7 @@ public class CommentFragment  extends BottomSheetDialogFragment implements IComm
                     public void onCancelled(@NonNull DatabaseError databaseError) {
                         listener.onCommentLoadFailed(databaseError.getMessage());
                     }
-                });
+                }));
 
     }
 

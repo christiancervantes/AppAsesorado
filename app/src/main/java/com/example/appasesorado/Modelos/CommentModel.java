@@ -5,7 +5,7 @@ import java.util.Map;
 public
 class CommentModel {
     private float ratingValue;
-    private String comment,name, id;
+    private String comment,name, id ,idEstudiante, avatar;
     private Map<String,Object> commentTimeStamp;
 
     public CommentModel() {
@@ -49,5 +49,21 @@ class CommentModel {
 
     public void setCommentTimeStamp(Map<String, Object> commentTimeStamp) {
         this.commentTimeStamp = commentTimeStamp;
+    }
+
+    public String getIdEstudiante() {
+        return idEstudiante;
+    }
+
+    public void setIdEstudiante(String idEstudiante) {
+        this.idEstudiante = idEstudiante;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

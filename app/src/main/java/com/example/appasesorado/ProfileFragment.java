@@ -21,7 +21,10 @@ import android.view.ViewGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.example.appasesorado.Comun.Comun;
 import com.example.appasesorado.Modelos.Asesor;
+import com.example.appasesorado.Modelos.Usuario;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -77,9 +80,8 @@ public class ProfileFragment extends Fragment {
         rating_bar3 = view.findViewById(R.id.rating_bar3);
         celulartv = view.findViewById(R.id.txtcelular);
 
-        imgavatar.setOnClickListener(view1 -> {
-            showDialogSelecterAvatar();
-        });
+        imgavatar.setOnClickListener(view1 ->
+                showDialogSelecterAvatar());
         Query query = databaseReference.orderByChild("idEstudiante").equalTo(user.getUid());
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -93,6 +95,7 @@ public class ProfileFragment extends Fragment {
                     String name = "" + ds.child("nombre").getValue();
                     String celular = "Tu número es " + ds.child("celular").getValue();
                     String tipo = "" + ds.child("tipo").getValue();
+                    Comun.actualUsuario.setTipo(tipo);
                     switch (tipo){
                         case "estu1":
                             imgavatar.setImageResource(R.drawable.man1);
