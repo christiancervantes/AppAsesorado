@@ -3,6 +3,7 @@ package com.example.appasesorado.Services;
 import androidx.annotation.NonNull;
 
 import com.example.appasesorado.Comun.Comun;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -25,6 +26,7 @@ class MyFCMServices extends FirebaseMessagingService {
     @Override
     public void onNewToken(@NonNull String s) {
         super.onNewToken(s);
-        Comun.updateToken(this,s);
+        if (FirebaseAuth.getInstance().getCurrentUser()!=null)
+            Comun.updateToken(this,s);
     }
 }

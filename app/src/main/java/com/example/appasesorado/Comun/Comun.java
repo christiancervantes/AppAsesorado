@@ -20,6 +20,9 @@ import com.example.appasesorado.Modelos.Celular;
 import com.example.appasesorado.Modelos.TokenModel;
 import com.example.appasesorado.Modelos.Usuario;
 import com.example.appasesorado.R;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public
@@ -31,12 +34,13 @@ class Comun {
     public static final String CELULARES_REF = "celulares";
     public static final String NOTI_TITLE = "title";
     public static final String NOTI_CONTENT = "content";
-    private static final String TOKEN_REF = "tokens";
+    public static final String TOKEN_REF = "tokens";
 
     public static Usuario actualUsuario;
     public static Asesor asesorseleccionado;
     public static String actualToken= "";
     public static Celular celularActual;
+
 
     public static boolean isConnectedToInternet (Context context){
         ConnectivityManager connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -87,15 +91,20 @@ class Comun {
 
     public static void updateToken(Context context , String newToken) {
 
-        if (Comun.actualUsuario !=null){ //arregla el bug de la localizacion al desintalar
+        TokenModel tokenModel = new TokenModel(newToken);
+        if (FirebaseAuth.getInstance().getCurrentUser().getUid() !=null){ //arregla el bug de la localizacion al desintalar
             FirebaseDatabase.getInstance()
                     .getReference(Comun.TOKEN_REF)
-                    .child(Comun.actualUsuario.getIdEstudiante())
-                    .setValue(new TokenModel(Comun.actualUsuario.getCelular(),Comun.actualUsuario.getNombre(),newToken))
+                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .setValue(tokenModel)
                     .addOnFailureListener(e -> {
                         Toast.makeText(context, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
 
-                    });
+                }
+            });
         }
     }
 

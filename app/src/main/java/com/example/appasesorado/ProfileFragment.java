@@ -72,7 +72,7 @@ public class ProfileFragment extends Fragment {
         rating_bar3 = view.findViewById(R.id.rating_bar3);
         celulartv = view.findViewById(R.id.txtcelular);
 
-        Query query = databaseReference.orderByChild("uid").equalTo(user.getUid());
+        Query query = databaseReference.orderByChild("idEstudiante").equalTo(user.getUid());
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
