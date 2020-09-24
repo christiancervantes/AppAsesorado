@@ -13,7 +13,6 @@ class RetrofitFCMClient {
         if (instance == null)
             instance = new Retrofit.Builder()
                     .baseUrl("https://fcm.googleapis.com/")
-
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .build();

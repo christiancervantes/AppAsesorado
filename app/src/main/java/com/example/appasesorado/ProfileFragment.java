@@ -80,7 +80,7 @@ public class ProfileFragment extends Fragment {
         imgavatar.setOnClickListener(view1 -> {
             showDialogSelecterAvatar();
         });
-        Query query = databaseReference.orderByChild("uid").equalTo(user.getUid());
+        Query query = databaseReference.orderByChild("idEstudiante").equalTo(user.getUid());
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

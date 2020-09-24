@@ -19,6 +19,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Base64;
@@ -38,6 +39,7 @@ import com.firebase.ui.auth.AuthMethodPickerLayout;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -45,6 +47,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -68,7 +72,7 @@ import io.reactivex.functions.Action;
 public class Splash extends AppCompatActivity {
 
     private static final int LOGIN_REQUEST_CODE = 7171;
-
+    private static final int PERMISSION_REQUEST_CODE = 1;
 
     //variables
     private String fechadenac;
@@ -98,7 +102,7 @@ public class Splash extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference studentInfoRef;
     DatabaseReference celularRef;
-
+    DatabaseReference tokenRef;
 
     @Override
     protected void onStart() {
@@ -110,6 +114,7 @@ public class Splash extends AppCompatActivity {
     protected void onStop() {
         if (firebaseAuth != null && listener != null)
             firebaseAuth.removeAuthStateListener(listener);
+
         super.onStop();
     }
 
@@ -148,6 +153,8 @@ public class Splash extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         studentInfoRef = database.getReference(Comun.STUDENT_INFO_REF);
         celularRef = database.getReference(Comun.CELULARES_REF);
+        tokenRef = database.getReference(Comun.TOKEN_REF);
+
 
 
         providers = Arrays.asList(
@@ -158,17 +165,41 @@ public class Splash extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
 
+       listener = myFirebaseAuth -> { //
+          FirebaseUser user = firebaseAuth.getCurrentUser();
+          if (user != null){
 
-                                listener = myFirebaseAuth -> { //
-                                    FirebaseUser user = firebaseAuth.getCurrentUser();
-                                    if (user != null)
-                                        //delaySplashScreen();
-                                        checkUserFromFirebase(user);
-                                    else
-                                        showLogin();
-                                };
+              //update token
+              FirebaseInstanceId.getInstance()
+                      .getInstanceId()
+                      .addOnFailureListener(e -> Toast.makeText(Splash.this, e.getMessage(), Toast.LENGTH_SHORT).show())
+                      .addOnSuccessListener(instanceIdResult -> {
+                          Log.d("Token2 --->", instanceIdResult.getToken());
+                          Comun.updateToken(Splash.this,instanceIdResult.getToken());
+                          
+                          tokenRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                  .setValue(instanceIdResult.getToken())
+                                  .addOnFailureListener(new OnFailureListener() {
+                                      @Override
+                                      public void onFailure(@NonNull Exception e) {
+                                          
+                                      }
+                                  }).addOnSuccessListener(new OnSuccessListener<Void>() {
+                              @Override
+                              public void onSuccess(Void aVoid) {
+                                  //Toast.makeText(Splash.this, "enviado el token", Toast.LENGTH_SHORT).show();
+                              }
+                          });
+
+                      });
+              checkUserFromFirebase(user);
+          }else{
+              showLogin();
+          }
+
+       };
                            
-                        }
+       }
 
 
     private void checkUserFromFirebase(FirebaseUser user) {
@@ -337,28 +368,115 @@ public class Splash extends AppCompatActivity {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 if (snapshot.exists()) {
-                                    
 
-                                    AlertDialog.Builder builder1 = new AlertDialog.Builder(Splash.this, R.style.AlertDialogCustom);
-                                    builder1.setCancelable(false);
+                                    int nrodeveces = snapshot.child("nroRegistro").getValue(Integer.class);
 
-                                    View itemView1 = LayoutInflater.from(Splash.this).inflate(R.layout.layout_verificacion_imei, null);
+                                    if (nrodeveces > 3){
 
-                                    builder1.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            dialogInterface.dismiss();
-                                            finish();
-                                            System.exit(0);
-                                        }
-                                    });
+                                        //Actualizar la la info del celular dentro de la base de datos "celulares"
+                                        DatabaseReference referenceaseasoria = FirebaseDatabase.getInstance().getReference("celulares").child(imei);
+                                        HashMap<String, Object> celular = new HashMap<>();
+                                        celular.put("fechaHoraActualizacionBloqueado", hourdateFormataa.format(dateAse));
+                                        celular.put("estado", "bloqueado");
+                                        referenceaseasoria.updateChildren(celular);
 
-                                    builder1.setView(itemView1);
-                                    final AlertDialog dialog1 = builder1.create();
-                                    dialog1.show();
+                                        AlertDialog.Builder builder1 = new AlertDialog.Builder(Splash.this, R.style.AlertDialogCustom);
+                                        builder1.setCancelable(false);
 
-                                } else {
+                                        View itemView1 = LayoutInflater.from(Splash.this).inflate(R.layout.layout_verificacion_imei, null);
 
+                                        builder1.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                                dialogInterface.dismiss();
+                                                finish();
+                                                System.exit(0);
+                                            }
+                                        });
+
+                                        builder1.setView(itemView1);
+                                        final AlertDialog dialog1 = builder1.create();
+                                        dialog1.show();
+
+                                    } else if (nrodeveces == 3){
+
+                                        studentInfoRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                                .setValue(usuario)
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        dialog.dismiss();
+                                                        Toast.makeText(Splash.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }).addOnCompleteListener(aVoid -> {
+
+                                            dialog.dismiss();
+                                            Toast.makeText(Splash.this, "Registrado correctamente!!", Toast.LENGTH_SHORT).show();
+                                            goToHomeActivity(usuario);
+
+                                            //Actualizar la la info del celular dentro de la base de datos "celulares"
+                                            DatabaseReference referenceaseasoria = FirebaseDatabase.getInstance().getReference("celulares").child(imei);
+                                                HashMap<String, Object> celular = new HashMap<>();
+                                                celular.put("fechaHoraAct3", hourdateFormataa.format(dateAse));
+                                            celular.put("nroRegistro", 4);
+                                            referenceaseasoria.updateChildren(celular);
+
+                                        });
+
+                                    }else if (nrodeveces == 2){
+                                        studentInfoRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                                .setValue(usuario)
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        dialog.dismiss();
+                                                        Toast.makeText(Splash.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }).addOnCompleteListener(aVoid -> {
+
+                                            dialog.dismiss();
+                                            Toast.makeText(Splash.this, "Registrado correctamente!!", Toast.LENGTH_SHORT).show();
+                                            goToHomeActivity(usuario);
+
+
+                                            //Actualizar la la info del celular dentro de la base de datos "celulares"
+                                            DatabaseReference referenceaseasoria = FirebaseDatabase.getInstance().getReference("celulares").child(imei);
+                                            HashMap<String, Object> celular = new HashMap<>();
+                                            celular.put("fechaHoraAct2", hourdateFormataa.format(dateAse));
+                                            celular.put("nroRegistro", 3);
+                                            referenceaseasoria.updateChildren(celular);
+
+                                        });
+
+                                    }else if (nrodeveces == 1){
+                                        studentInfoRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                                .setValue(usuario)
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        dialog.dismiss();
+                                                        Toast.makeText(Splash.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }).addOnCompleteListener(aVoid -> {
+
+                                            dialog.dismiss();
+                                            Toast.makeText(Splash.this, "Registrado correctamente!!", Toast.LENGTH_SHORT).show();
+                                            goToHomeActivity(usuario);
+
+
+                                            //Actualizar la la info del celular dentro de la base de datos "celulares"
+                                            DatabaseReference referenceaseasoria = FirebaseDatabase.getInstance().getReference("celulares").child(imei);
+                                            HashMap<String, Object> celular = new HashMap<>();
+                                            celular.put("fechaHoraAct1", hourdateFormataa.format(dateAse));
+                                            celular.put("nroRegistro", 2);
+                                            referenceaseasoria.updateChildren(celular);
+
+                                        });
+
+                                    }
+
+                                }else {
                                     studentInfoRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                             .setValue(usuario)
                                             .addOnFailureListener(new OnFailureListener() {
@@ -369,25 +487,24 @@ public class Splash extends AppCompatActivity {
                                                 }
                                             }).addOnCompleteListener(aVoid -> {
 
+                                        dialog.dismiss();
+                                        Toast.makeText(Splash.this, "Registrado correctamente!!", Toast.LENGTH_SHORT).show();
+                                        goToHomeActivity(usuario);
 
-                                                    dialog.dismiss();
-                                                    Toast.makeText(Splash.this, "Registrado correctamente!!", Toast.LENGTH_SHORT).show();
-                                                    goToHomeActivity(usuario);
+                                        //Guardar la la info del celular dentro de la base de datos "celulares"
+                                        HashMap<String, Object> celular = new HashMap<>();
+                                        celular.put("imei", "" + imei);
+                                        celular.put("modeloCelular", "" + modelo.getText().toString());
+                                        celular.put("fechaHoraAct0", hourdateFormataa.format(dateAse));
+                                        celular.put("nroRegistro", 1);
+                                        DatabaseReference referenceaseasoria = FirebaseDatabase.getInstance().getReference("celulares");
+                                        referenceaseasoria.child(imei).setValue(celular).addOnSuccessListener(aVoid1 -> {
+                                            //nada
 
-                                                    //Guardar la la info del celular dentro de la base de datos "celulares"
-                                                    HashMap<String, Object> celular = new HashMap<>();
-                                                    celular.put("imei", "" + imei);
-                                                    celular.put("modeloCelular", "" + modelo.getText().toString());
-                                                    celular.put("fechahoraregis", hourdateFormataa.format(dateAse));
-                                                    celular.put("nroRegistro", 1);
-                                                    DatabaseReference referenceaseasoria = FirebaseDatabase.getInstance().getReference("celulares");
-                                                    referenceaseasoria.child(imei).setValue(celular).addOnSuccessListener(aVoid1 -> {
-                                                        //nada
+                                        }).addOnFailureListener(e -> {
 
-                                                    }).addOnFailureListener(e -> {
-
-                                                        //nada
-                                                    });
+                                            //nada
+                                        });
 
                                     });
                                 }
@@ -416,7 +533,7 @@ public class Splash extends AppCompatActivity {
                 ActivityCompat.requestPermissions(Splash.this, new String[]{permission}, requestCode);
             }
         } else {
-            imei = obtenerIMEI();
+            imei = getDeviceId(getApplicationContext());
            // Toast.makeText(this,permission+" El permiso a la aplicación está concedido.", Toast.LENGTH_SHORT).show();
         }
     }
@@ -431,7 +548,7 @@ public class Splash extends AppCompatActivity {
                 // Validamos si el usuario acepta el permiso para que la aplicación acceda a los datos internos del equipo, si no denegamos el acceso
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                    imei = obtenerIMEI();
+                    imei = getDeviceId(getApplicationContext());
 
                 } else {
 
@@ -444,15 +561,39 @@ public class Splash extends AppCompatActivity {
 
     // Con este método consultamos al usuario si nos puede dar acceso a leer los datos internos del móvil
     private String obtenerIMEI() {
-        final TelephonyManager telephonyManager= (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
 
+
+        final TelephonyManager telephonyManager= (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             //Hacemos la validación de métodos, ya que el método getDeviceId() ya no se admite para android Oreo en adelante, debemos usar el método getImei()
-            return telephonyManager.getImei();
+           return telephonyManager.getImei();
         }
-        else {
-            return telephonyManager.getDeviceId();
+       else {
+        return telephonyManager.getDeviceId();
+       }
+
+    }
+
+    public static String getDeviceId(Context context) {
+
+        String deviceId;
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            deviceId = Settings.Secure.getString(
+                    context.getContentResolver(),
+                    Settings.Secure.ANDROID_ID);
+        } else {
+            final TelephonyManager mTelephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            if (mTelephony.getDeviceId() != null) {
+                deviceId = mTelephony.getDeviceId();
+            } else {
+                deviceId = Settings.Secure.getString(
+                        context.getContentResolver(),
+                        Settings.Secure.ANDROID_ID);
+            }
         }
+
+        return deviceId;
     }
 
     //con este metodo se obtiene el fabricante y modelo de ceular
@@ -534,6 +675,7 @@ public class Splash extends AppCompatActivity {
         imm.hideSoftInputFromWindow(edt.getWindowToken(), 0);
 
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
