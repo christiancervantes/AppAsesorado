@@ -75,6 +75,7 @@ public class ProfileFragment extends Fragment {
         databaseReference = firebaseDatabase.getReference("estudiantes");
 
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Mi Perfil");
+
         imgavatar = view.findViewById(R.id.imgavatar);
         nameTv = view.findViewById(R.id.txtnombre);
         rating_bar3 = view.findViewById(R.id.rating_bar3);
@@ -116,7 +117,7 @@ public class ProfileFragment extends Fragment {
                             imgavatar.setImageResource(R.drawable.woman);
                             break;
                         default:
-                            imgavatar.setImageResource(R.drawable.whatsapp);
+                            imgavatar.setImageResource(R.drawable.ic_baseline_account_circle_24);
                             break;
                     }
 

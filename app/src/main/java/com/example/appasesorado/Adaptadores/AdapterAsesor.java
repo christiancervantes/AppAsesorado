@@ -316,7 +316,7 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
                         hashMap3.put("ratingdeestudiante", ""+commentModel.getRatingValue());
                         hashMap3.put("fechahorafinest", hourdateFormataa.format(dateAse));
                         hashMap3.put("estadoxyz", 1);
-                        hashMap3.put("estado", "finish asesoria");
+                        hashMap3.put("estado", "impaga");
                         dbrefx.updateChildren(hashMap3);
                         //-*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*-
 
@@ -373,14 +373,12 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
                 HashMap<String, Object> hashMap4 = new HashMap<>();
                 hashMap4.put("fechahoraCancelar", hourdateFormataa.format(dateAse));  // abr-07-09-2020
                 hashMap4.put("estadoxyz", -1);    // abr-07-09-20201
-                hashMap4.put("estado", "cancelo asesoria");    // abr-07-09-2020
+                hashMap4.put("estado", "cancelado");    // abr-07-09-2020
                 dbrefx.updateChildren(hashMap4);
                 //-*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*--*-*-
             }
         });
     }
-
-
 
     private void addRatingToFood(float ratingValue) {
         FirebaseDatabase.getInstance()
@@ -486,8 +484,6 @@ public class AdapterAsesor extends RecyclerView.Adapter<AdapterAsesor.MyHolder> 
                     }
                 });
     }
-
-
 
     private boolean appInstalledOrNot(String url) {
         PackageManager packageManager = context.getPackageManager();

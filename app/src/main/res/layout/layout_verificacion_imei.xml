@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <TextView
-        android:text="No puedes registrar más de 3 cuentas diferentes en este dispositivo."
+        android:text="No puedes registrar más de 2 cuentas diferentes en este dispositivo."
         android:textSize="22sp"
         android:fontFamily="@font/belleza"
         android:gravity="center_horizontal"

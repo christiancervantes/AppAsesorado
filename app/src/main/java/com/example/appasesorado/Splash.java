@@ -208,7 +208,7 @@ public class Splash extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()){
-                            //Toast.makeText(Splash.this, "Ingreso", Toast.LENGTH_SHORT).show();
+
                             Usuario usuario = snapshot.getValue(Usuario.class);
                             goToHomeActivity(usuario);
 
@@ -243,7 +243,6 @@ public class Splash extends AppCompatActivity {
         obtenerImei=(TextView) itemView.findViewById(R.id.imeiPhoner);
         EditText edt_nombre = (EditText) itemView.findViewById(R.id.edt_nombre);
         EditText edt_celular = (EditText) itemView.findViewById(R.id.edt_phone);
-        //TextView nroRegistro = (TextView)itemView.findViewById(R.id.nroregistro);
         TextView modelo  = (TextView)itemView.findViewById(R.id.modelo);
 
         CheckBox cbxterminos = (CheckBox) itemView.findViewById(R.id.cbxterminos);
@@ -285,7 +284,6 @@ public class Splash extends AppCompatActivity {
         //MaterialEditText edt_fechadenacimiento = findViewById(R.id.edt_fechadenacimiento);
         EditText edt_fechadenacimiento = (EditText) itemView.findViewById(R.id.edt_fechadenacimiento);
         edt_fechadenacimiento.setOnClickListener(v -> {
-
 
             ocultarTeclado(edt_nombre);
 
@@ -371,7 +369,7 @@ public class Splash extends AppCompatActivity {
 
                                     int nrodeveces = snapshot.child("nroRegistro").getValue(Integer.class);
 
-                                    if (nrodeveces > 3){
+                                    if (nrodeveces > 2){
 
                                         //Actualizar la la info del celular dentro de la base de datos "celulares"
                                         DatabaseReference referenceaseasoria = FirebaseDatabase.getInstance().getReference("celulares").child(imei);
@@ -399,30 +397,6 @@ public class Splash extends AppCompatActivity {
                                         final AlertDialog dialog1 = builder1.create();
                                         dialog1.show();
 
-                                    } else if (nrodeveces == 3){
-
-                                        studentInfoRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                                .setValue(usuario)
-                                                .addOnFailureListener(new OnFailureListener() {
-                                                    @Override
-                                                    public void onFailure(@NonNull Exception e) {
-                                                        dialog.dismiss();
-                                                        Toast.makeText(Splash.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                                                    }
-                                                }).addOnCompleteListener(aVoid -> {
-
-                                            dialog.dismiss();
-                                            Toast.makeText(Splash.this, "Registrado correctamente!!", Toast.LENGTH_SHORT).show();
-                                            goToHomeActivity(usuario);
-
-                                            //Actualizar la la info del celular dentro de la base de datos "celulares"
-                                            DatabaseReference referenceaseasoria = FirebaseDatabase.getInstance().getReference("celulares").child(imei);
-                                                HashMap<String, Object> celular = new HashMap<>();
-                                                celular.put("fechaHoraAct3", hourdateFormataa.format(dateAse));
-                                            celular.put("nroRegistro", 4);
-                                            referenceaseasoria.updateChildren(celular);
-
-                                        });
 
                                     }else if (nrodeveces == 2){
                                         studentInfoRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
@@ -559,20 +533,6 @@ public class Splash extends AppCompatActivity {
         }
     }
 
-    // Con este método consultamos al usuario si nos puede dar acceso a leer los datos internos del móvil
-    private String obtenerIMEI() {
-
-
-        final TelephonyManager telephonyManager= (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            //Hacemos la validación de métodos, ya que el método getDeviceId() ya no se admite para android Oreo en adelante, debemos usar el método getImei()
-           return telephonyManager.getImei();
-        }
-       else {
-        return telephonyManager.getDeviceId();
-       }
-
-    }
 
     public static String getDeviceId(Context context) {
 
@@ -675,7 +635,6 @@ public class Splash extends AppCompatActivity {
         imm.hideSoftInputFromWindow(edt.getWindowToken(), 0);
 
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
